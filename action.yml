@@ -9,4 +9,4 @@ inputs:
 
 runs:
   using: 'node12'
-  main: 'scripts/index.ts'
+  main: 'dist/index.js'
