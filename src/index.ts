@@ -8,5 +8,9 @@ core.setOutput('end_time', end_time);
 const actionName = core.getInput('action_name');
 console.log(`Hello from ${actionName}`);
 
-const payload = JSON.stringify(github.context.payload, undefined, 2);
+const payload = JSON.stringify(github.context.payload);
 console.log(`The event payload: ${payload}`);
+
+
+const context = JSON.stringify(github.context.payload);
+console.log(`The event context: ${context}`);
