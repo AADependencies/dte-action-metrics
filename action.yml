@@ -4,7 +4,7 @@ author: Mohamed El-Malah
 
 inputs:
   action_name:
-    description: nName of calling action
+    description: Name of calling action
     required: true
 
 runs:
