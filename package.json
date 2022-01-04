@@ -1,0 +1,27 @@
+{
+  "name": "dte-action-metrics",
+  "version": "1.0.0",
+  "description": "GitHub action to be embedded into other actions to capture action specific metrics.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AADependencies/dte-action-metrics.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AADependencies/dte-action-metrics/issues"
+  },
+  "homepage": "https://github.com/AADependencies/dte-action-metrics#readme",
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.7"
+  }
+}

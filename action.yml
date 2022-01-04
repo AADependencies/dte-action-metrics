@@ -1,0 +1,12 @@
+name: DTE Action Metrics
+description: This action will collect metrics from the other actions that utilize it
+author: Mohamed El-Malah
+
+inputs:
+  action_name:
+    description: nName of calling action
+    required: true
+
+runs:
+  using: 'node12'
+  main: 'index.js'
