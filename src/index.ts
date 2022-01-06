@@ -50,4 +50,4 @@ const actionContext: ActionContext = {
   run_url: `${context.payload.repository.html_url}/actions/runs/${context.run_id}`,
 };
 
-console.log(`Parsed Context: ${actionContext}`);
+console.log(`Parsed Context: ${JSON.stringify(actionContext, null, 2)}`);
