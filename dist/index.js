@@ -28,15 +28,33 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-const end_time = new Date().toTimeString();
-console.log(`Ended at ${end_time}`);
-core.setOutput('end_time', end_time);
-const actionName = core.getInput('action_name');
-console.log(`Hello from ${actionName}`);
-const payload = JSON.stringify(github.context.payload, null, 2);
-console.log(`The event payload: ${payload}`);
-const context = JSON.stringify(github.context, null, 2);
-console.log(`The event context: ${context}`);
+const action_start_time = core.getInput("start_time");
+console.log(`Stated at: ${action_start_time}`);
+const action_end_time = new Date().toTimeString();
+console.log(`Ended at: ${action_end_time}`);
+const actionName = core.getInput("action_name");
+console.log(`Action Name: ${actionName}`);
+const context = JSON.parse(JSON.stringify(github.context));
+console.log(`Action Context: ${context}`);
+// create var of type ActionContext
+const actionContext = {
+    name: actionName,
+    repo: context.payload.repository.name,
+    actor: context.actor,
+    start_time: action_start_time,
+    end_time: action_end_time,
+    workflow_name: context.workflow,
+    workflow_file: context.payload.repository.workflow,
+    workflow_trigger: context.eventName,
+    job_name: context.job,
+    // end_status: context.state,
+    // os: context.event_type,
+    sha: context.sha,
+    repo_ref: context.ref,
+    // version: context.event_type,
+    run_url: `${context.payload.repository.html_url}/actions/runs/${context.run_id}`,
+};
+console.log(`Parsed Context: ${actionContext}`);
 
 
 /***/ }),

@@ -17,14 +17,7 @@
         "eslint-comments/no-use": "off",
         "import/no-namespace": "off",
         "no-console": "off",
-        "prettier/prettier": [
-            "warn",
-            {
-                "singleQuote": true,
-                "semi": true,
-                "insert": true
-            }
-        ],
+        "prettier/prettier": 0,
         "@typescript-eslint/no-unused-vars": "error",
         "@typescript-eslint/explicit-member-accessibility": [
             "error",

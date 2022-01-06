@@ -1,16 +1,53 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 
-const end_time = new Date().toTimeString();
-console.log(`Ended at ${end_time}`);
-core.setOutput('end_time', end_time);
+interface ActionContext {
+  name: string;
+  actor: string;
+  repo: string;
+  start_time: string;
+  end_time: string;
+  workflow_name: string;
+  workflow_file: string;
+  workflow_trigger: string;
+  job_name: string;
+  // end_status: string;
+  // os: string;
+  sha: string;
+  repo_ref: string;
+  // version: string;
+  run_url: string;
+}
 
-const actionName = core.getInput('action_name');
-console.log(`Hello from ${actionName}`);
+const action_start_time = core.getInput("start_time");
+console.log(`Stated at: ${action_start_time}`);
 
-const payload = JSON.stringify(github.context.payload, null, 2);
-console.log(`The event payload: ${payload}`);
+const action_end_time = new Date().toTimeString();
+console.log(`Ended at: ${action_end_time}`);
 
+const actionName = core.getInput("action_name");
+console.log(`Action Name: ${actionName}`);
 
-const context = JSON.stringify(github.context, null, 2);
-console.log(`The event context: ${context}`);
+const context = JSON.parse(JSON.stringify(github.context));
+console.log(`Action Context: ${context}`);
+
+// create var of type ActionContext
+const actionContext: ActionContext = {
+  name: actionName,
+  repo: context.payload.repository.name,
+  actor: context.actor,
+  start_time: action_start_time,
+  end_time: action_end_time,
+  workflow_name: context.workflow,
+  workflow_file: context.payload.repository.workflow,
+  workflow_trigger: context.eventName,
+  job_name: context.job,
+  // end_status: context.state,
+  // os: context.event_type,
+  sha: context.sha,
+  repo_ref: context.ref,
+  // version: context.event_type,
+  run_url: `${context.payload.repository.html_url}/actions/runs/${context.run_id}`,
+};
+
+console.log(`Parsed Context: ${actionContext}`);

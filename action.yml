@@ -6,6 +6,9 @@ inputs:
   action_name:
     description: Name of calling action
     required: true
+  start_time:
+    description: Time action started
+    required: true
 
 runs:
   using: 'node12'
