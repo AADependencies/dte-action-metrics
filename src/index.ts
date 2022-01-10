@@ -28,8 +28,9 @@ console.log(`Ended at: ${action_end_time}`);
 const actionName = core.getInput("action_name");
 console.log(`Action Name: ${actionName}`);
 
+console.log(`Action Context: ${JSON.stringify(github.context, null, 2)}`);
 const context = JSON.parse(JSON.stringify(github.context));
-console.log(`Action Context: ${context}`);
+
 
 // create var of type ActionContext
 const actionContext: ActionContext = {
