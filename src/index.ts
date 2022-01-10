@@ -4,7 +4,7 @@ import * as github from '@actions/github';
 interface ActionContext {
   name: string;
   actor: string;
-  repo: string;
+  repo_name: string;
   start_time: string;
   end_time: string;
   workflow_name: string;
@@ -34,7 +34,7 @@ console.log(`Action Context: ${context}`);
 // create var of type ActionContext
 const actionContext: ActionContext = {
   name: actionName,
-  repo: context.payload.repository.name,
+  repo_name: context.payload.repository.name,
   actor: context.actor,
   start_time: action_start_time,
   end_time: action_end_time,

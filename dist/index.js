@@ -39,7 +39,7 @@ console.log(`Action Context: ${context}`);
 // create var of type ActionContext
 const actionContext = {
     name: actionName,
-    repo: context.payload.repository.name,
+    repo_name: context.payload.repository.name,
     actor: context.actor,
     start_time: action_start_time,
     end_time: action_end_time,
