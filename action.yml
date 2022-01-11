@@ -24,5 +24,5 @@ runs:
     - name: Get action metrics
       id: metrics
       run: |
-        node dist/index.js
+        node ${{ github.action_path }}/dist/index.js
       shell: bash
