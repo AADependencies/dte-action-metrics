@@ -11,5 +11,18 @@ inputs:
     required: true
 
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: 'composite'
+
+  steps:
+    - name: Check token
+      id: token
+      run: |
+        echo "Checking token"
+        echo "Token: ${{github.token}}"
+      shell: bash
+
+    - name: Get action metrics
+      id: metrics
+      run: |
+        node dist/index.js
+      shell: bash

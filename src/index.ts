@@ -19,7 +19,9 @@ interface ActionContext {
   run_url: string;
 }
 
-const gh = new Octokit({auth: "github_token"});
+// const gh_token = ${GITHUB_TOKEN};
+
+const gh = new Octokit({auth: "test"});
 
 const actionStartTime = core.getInput("start_time");
 
