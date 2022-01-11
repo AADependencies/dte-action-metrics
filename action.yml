@@ -24,8 +24,7 @@ runs:
     - name: Get action metrics
       id: metrics
       env:
-        GH_TOKEN: ${{ steps.token.outputs.gh-token }}
-        GHA_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ github.token }}
       run: |
         node ${{ github.action_path }}/dist/index.js
       shell: bash
