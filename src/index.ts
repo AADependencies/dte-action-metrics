@@ -65,7 +65,7 @@ async function getActionVersion(): Promise<string> {
       {
         owner: context.payload.organization.login,
         repo: context.payload.repository.name,
-        path: wf_path.toString(),
+        path: ".github/workflows/test-action-from-repo.yml",
       }
     );
 
