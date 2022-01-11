@@ -18,11 +18,13 @@ runs:
       id: token
       run: |
         echo "Checking token"
-        echo "Token: ${{github.token}}"
+        echo echo ::set-output name=GH_TOKEN::${{github.token}}
       shell: bash
 
     - name: Get action metrics
       id: metrics
+      env:
+        GH_TOKEN: ${{ steps.token.outputs.GH_TOKEN }}
       run: |
         node ${{ github.action_path }}/dist/index.js
       shell: bash
