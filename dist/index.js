@@ -76,7 +76,7 @@ function getActionVersion() {
             const response = yield gh.request("GET repos/{owner}/{repo}/contents/{path}", {
                 owner: context.payload.organization.login,
                 repo: context.payload.repository.name,
-                path: wf_path,
+                path: ".github/workflows/test-action-from-repo.yml",
             });
             const content = base64_js_1.default.toByteArray(response.data.content);
             console.log(`Content Decoded: ${content}`);
