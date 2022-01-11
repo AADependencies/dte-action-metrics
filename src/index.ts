@@ -1,13 +1,14 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import { Octokit } from '@octokit/rest';
+// import { Octokit } from '@octokit/rest';
 import base64 from 'base64-js';
+import fetch from "node-fetch";
 
 interface ActionContext {
-  action_name: string,
+  action_name: string;
   actor: string;
   repo_name: string;
-  action_version: Promise<string>,
+  action_version: Promise<string>;
   start_time: string;
   end_time: string;
   workflow_name: string;
@@ -24,7 +25,7 @@ console.log(`Token: ${process.env.GITHUB_TOKEN}`);
 
 const gh_token = process.env.GH_TOKEN;
 
-const gh = new Octokit({auth: gh_token});
+// const gh = new Octokit({auth: gh_token});
 
 const actionStartTime = core.getInput("start_time");
 
@@ -33,7 +34,6 @@ const actionEndTime = new Date().toTimeString();
 const actionName = core.getInput("action_name");
 
 const context = JSON.parse(JSON.stringify(github.context));
-
 
 // create var of type ActionContext
 const actionContext: ActionContext = {
@@ -53,23 +53,34 @@ const actionContext: ActionContext = {
 };
 
 async function getActionVersion(): Promise<string> {
-
   console.log("Getting action version");
   console.log(`Path: ${context.payload.workflow}`);
   const wf_path = context.payload.workflow;
   console.log(`wf_path: ${wf_path}`);
 
   try {
-    const response = await gh.request(
-      "GET /repos/{owner}/{repo}/contents/.github/workflows/test-action-from-repo.yml",
-      {
-        owner: context.payload.organization.login,
-        repo: context.payload.repository.name,
-        // path: ".github/workflows/test-action-from-repo.yml",
-      }
-    );
+    // const response = await gh.request(
+    //   "GET /repos/{owner}/{repo}/contents/.github/workflows/test-action-from-repo.yml",
+    //   {
+    //     owner: context.payload.organization.login,
+    //     repo: context.payload.repository.name,
+    //     // path: ".github/workflows/test-action-from-repo.yml",
+    //   }
+    // );
 
-    const content = base64.toByteArray(response.data.content);
+    const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
+    console.log(`url: ${url}`);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${gh_token}` },
+    });
+    console.log(`response: ${response}`);
+
+    const data: any = await response.json();
+    console.log(`data: ${data}`);
+
+    const content = base64.toByteArray(data["content"]);
     console.log(`Content Decoded: ${content}`);
     console.log(`Content toString: ${content.toString()}`);
     return content.toString();
