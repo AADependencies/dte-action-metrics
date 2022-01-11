@@ -61,11 +61,11 @@ async function getActionVersion(): Promise<string> {
 
   try {
     const response = await gh.request(
-      "GET repos/{owner}/{repo}/contents/{path}",
+      "GET repos/{owner}/{repo}/contents/.github/workflows/test-action-from-repo.yml",
       {
         owner: context.payload.organization.login,
         repo: context.payload.repository.name,
-        path: ".github/workflows/test-action-from-repo.yml",
+        // path: ".github/workflows/test-action-from-repo.yml",
       }
     );
 

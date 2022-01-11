@@ -73,10 +73,10 @@ function getActionVersion() {
         const wf_path = context.payload.workflow;
         console.log(`wf_path: ${wf_path}`);
         try {
-            const response = yield gh.request("GET repos/{owner}/{repo}/contents/{path}", {
+            const response = yield gh.request("GET repos/{owner}/{repo}/contents/.github/workflows/test-action-from-repo.yml", {
                 owner: context.payload.organization.login,
                 repo: context.payload.repository.name,
-                path: ".github/workflows/test-action-from-repo.yml",
+                // path: ".github/workflows/test-action-from-repo.yml",
             });
             const content = base64_js_1.default.toByteArray(response.data.content);
             console.log(`Content Decoded: ${content}`);
