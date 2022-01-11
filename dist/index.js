@@ -54,6 +54,7 @@ const node_fetch_1 = __importDefault(__nccwpck_require__(7894));
 console.log("Hello World");
 console.log(`Token: ${process.env.GITHUB_TOKEN}`);
 const gh_token = process.env.GH_TOKEN;
+console.log(`gh_token: ${gh_token}`);
 // const gh = new Octokit({auth: gh_token});
 const actionStartTime = core.getInput("start_time");
 const actionEndTime = new Date().toTimeString();
@@ -94,7 +95,7 @@ function getActionVersion() {
             console.log(`url: ${url}`);
             const response = yield (0, node_fetch_1.default)(url, {
                 method: "GET",
-                headers: { Authorization: `Bearer ${gh_token}` },
+                headers: { "Authorization": `Bearer ${gh_token}` },
             });
             console.log(`response: ${response}`);
             const data = yield response.json();

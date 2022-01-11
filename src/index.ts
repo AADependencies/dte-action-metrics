@@ -24,6 +24,7 @@ console.log("Hello World");
 console.log(`Token: ${process.env.GITHUB_TOKEN}`);
 
 const gh_token = process.env.GH_TOKEN;
+console.log(`gh_token: ${gh_token}`);
 
 // const gh = new Octokit({auth: gh_token});
 
@@ -73,7 +74,7 @@ async function getActionVersion(): Promise<string> {
 
     const response = await fetch(url, {
       method: "GET",
-      headers: { Authorization: `Bearer ${gh_token}` },
+      headers: { "Authorization": `Bearer ${gh_token}` },
     });
     console.log(`response: ${response}`);
 
