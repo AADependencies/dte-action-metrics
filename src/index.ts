@@ -1,54 +1,65 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import { Octokit } from '@octokit/rest';
+import base64 from 'base64-js';
 
 interface ActionContext {
-  name: string;
+  action_name: string,
   actor: string;
   repo_name: string;
+  action_version: Promise<string>,
   start_time: string;
   end_time: string;
   workflow_name: string;
   workflow_file: string;
   workflow_trigger: string;
   job_name: string;
-  // end_status: string;
-  // os: string;
   sha: string;
   repo_ref: string;
-  // version: string;
   run_url: string;
 }
 
-const action_start_time = core.getInput("start_time");
-console.log(`Stated at: ${action_start_time}`);
+const gh = new Octokit({auth: "github_token"});
 
-const action_end_time = new Date().toTimeString();
-console.log(`Ended at: ${action_end_time}`);
+const actionStartTime = core.getInput("start_time");
+
+const actionEndTime = new Date().toTimeString();
 
 const actionName = core.getInput("action_name");
-console.log(`Action Name: ${actionName}`);
 
-console.log(`Action Context: ${JSON.stringify(github.context, null, 2)}`);
 const context = JSON.parse(JSON.stringify(github.context));
 
 
 // create var of type ActionContext
 const actionContext: ActionContext = {
-  name: actionName,
-  repo_name: context.payload.repository.name,
+  action_name: actionName,
   actor: context.actor,
-  start_time: action_start_time,
-  end_time: action_end_time,
+  repo_name: context.payload.repository.name,
+  action_version: getActionVersion(),
+  start_time: actionStartTime,
+  end_time: actionEndTime,
   workflow_name: context.workflow,
   workflow_file: context.payload.repository.workflow,
   workflow_trigger: context.eventName,
   job_name: context.job,
-  // end_status: context.state,
-  // os: context.event_type,
   sha: context.sha,
   repo_ref: context.ref,
-  // version: context.event_type,
-  run_url: `${context.payload.repository.html_url}/actions/runs/${context.run_id}`,
+  run_url: `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
 };
+
+async function getActionVersion(): Promise<string> {
+  const response = await gh.request('GET repos/{owner}/{repo}/contents/{path}', {
+    owner: context.payload.organization.login,
+    repo: context.payload.repository.name,
+    path: context.payload.workflow,
+  });
+
+  const content = base64.toByteArray(response.data.content);
+  console.log(content);
+
+  return content.toString();
+}
+
+
 
 console.log(`Parsed Context: ${JSON.stringify(actionContext, null, 2)}`);

@@ -23,7 +23,10 @@
   "homepage": "https://github.com/AADependencies/dte-action-metrics#readme",
   "dependencies": {
     "@actions/core": "^1.6.0",
-    "@actions/github": "^5.0.0"
+    "@actions/github": "^5.0.0",
+    "@octokit/rest": "^18.12.0",
+    "@octokit/types": "^6.34.0",
+    "base64-js": "^1.5.1"
   },
   "devDependencies": {
     "@types/node": "^16.10.5",
