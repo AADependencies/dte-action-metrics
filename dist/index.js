@@ -53,6 +53,7 @@ const base64_js_1 = __importDefault(__nccwpck_require__(6463));
 const node_fetch_1 = __importDefault(__nccwpck_require__(7894));
 console.log("Hello World");
 console.log(`Token: ${process.env.GITHUB_TOKEN}`);
+console.log(`TokenA: ${process.env.GHA_TOKEN}`);
 const gh_token = process.env.GH_TOKEN;
 console.log(`gh_token: ${gh_token}`);
 // const gh = new Octokit({auth: gh_token});
@@ -95,7 +96,10 @@ function getActionVersion() {
             console.log(`url: ${url}`);
             const response = yield (0, node_fetch_1.default)(url, {
                 method: "GET",
-                headers: { "Authorization": `Bearer ${gh_token}` },
+                headers: {
+                    authorization: `Bearer ${gh_token}`,
+                    "content-type": "application/json",
+                },
             });
             console.log(`response: ${response}`);
             const data = yield response.json();
@@ -112,6 +116,9 @@ function getActionVersion() {
         }
     });
 }
+// TO-DO - send to micro-service
+// Will need eventhub name and data in call
+// Url might be an input to this action
 console.log(`Parsed Context: ${JSON.stringify(actionContext, null, 2)}`);
 
 

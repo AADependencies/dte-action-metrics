@@ -22,7 +22,7 @@ interface ActionContext {
 
 console.log("Hello World");
 console.log(`Token: ${process.env.GITHUB_TOKEN}`);
-
+console.log(`TokenA: ${process.env.GHA_TOKEN}`);
 const gh_token = process.env.GH_TOKEN;
 console.log(`gh_token: ${gh_token}`);
 
@@ -74,7 +74,10 @@ async function getActionVersion(): Promise<string> {
 
     const response = await fetch(url, {
       method: "GET",
-      headers: { "Authorization": `Bearer ${gh_token}` },
+      headers: {
+        authorization: `Bearer ${gh_token}`,
+        "content-type": "application/json",
+      },
     });
     console.log(`response: ${response}`);
 
@@ -93,5 +96,8 @@ async function getActionVersion(): Promise<string> {
   }
 }
 
+// TO-DO - send to micro-service
+// Will need eventhub name and data in call
+// Url might be an input to this action
 
 console.log(`Parsed Context: ${JSON.stringify(actionContext, null, 2)}`);
