@@ -56,6 +56,8 @@ async function getActionVersion(): Promise<string> {
 
   console.log("Getting action version");
   console.log(`Path: ${context.payload.workflow}`);
+  const wf_path = context.payload.workflow;
+  console.log(`wf_path: ${wf_path}`);
 
   try {
     const response = await gh.request(
@@ -63,7 +65,7 @@ async function getActionVersion(): Promise<string> {
       {
         owner: context.payload.organization.login,
         repo: context.payload.repository.name,
-        path: context.payload.workflow,
+        path: wf_path,
       }
     );
 
