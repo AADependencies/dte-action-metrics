@@ -80,6 +80,8 @@ async function getActionVersion(): Promise<string> {
     const data: any = await response.json();
     console.log(`data: ${data}`);
 
+    console.log(`data_json: ${JSON.stringify(data, null, 2)}`);
+
     const content = base64.toByteArray(data["content"]);
     console.log(`Content Decoded: ${content}`);
     console.log(`Content toString: ${content.toString()}`);
