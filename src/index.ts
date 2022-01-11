@@ -48,18 +48,29 @@ const actionContext: ActionContext = {
 };
 
 async function getActionVersion(): Promise<string> {
-  const response = await gh.request('GET repos/{owner}/{repo}/contents/{path}', {
-    owner: context.payload.organization.login,
-    repo: context.payload.repository.name,
-    path: context.payload.workflow,
-  });
 
-  const content = base64.toByteArray(response.data.content);
-  console.log(content);
+  console.log("Getting action version");
+  console.log(`Path: ${context.payload.workflow}`);
 
-  return content.toString();
+  try {
+    const response = await gh.request(
+      "GET repos/{owner}/{repo}/contents/{path}",
+      {
+        owner: context.payload.organization.login,
+        repo: context.payload.repository.name,
+        path: context.payload.workflow,
+      }
+    );
+
+    const content = base64.toByteArray(response.data.content);
+    console.log(`Content Decoded: ${content}`);
+    console.log(`Content toString: ${content.toString()}`);
+    return content.toString();
+  } catch (error) {
+    console.log(error);
+    return "Failed to get version";
+  }
 }
-
 
 
 console.log(`Parsed Context: ${JSON.stringify(actionContext, null, 2)}`);

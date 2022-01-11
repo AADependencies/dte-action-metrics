@@ -65,14 +65,23 @@ const actionContext = {
 };
 function getActionVersion() {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield gh.request('GET repos/{owner}/{repo}/contents/{path}', {
-            owner: context.payload.organization.login,
-            repo: context.payload.repository.name,
-            path: context.payload.workflow,
-        });
-        const content = base64_js_1.default.toByteArray(response.data.content);
-        console.log(content);
-        return content.toString();
+        console.log("Getting action version");
+        console.log(`Path: ${context.payload.workflow}`);
+        try {
+            const response = yield gh.request("GET repos/{owner}/{repo}/contents/{path}", {
+                owner: context.payload.organization.login,
+                repo: context.payload.repository.name,
+                path: context.payload.workflow,
+            });
+            const content = base64_js_1.default.toByteArray(response.data.content);
+            console.log(`Content Decoded: ${content}`);
+            console.log(`Content toString: ${content.toString()}`);
+            return content.toString();
+        }
+        catch (error) {
+            console.log(error);
+            return "Failed to get version";
+        }
     });
 }
 console.log(`Parsed Context: ${JSON.stringify(actionContext, null, 2)}`);
