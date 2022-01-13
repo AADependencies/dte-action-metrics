@@ -8,7 +8,7 @@
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license LICENSE",
-    "all": "npm run lint && npm test && npm run build && npm run package "
+    "all": "npm test && npm run build && npm run package "
   },
   "repository": {
     "type": "git",
