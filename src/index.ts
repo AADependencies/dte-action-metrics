@@ -1,6 +1,5 @@
 // import * as core from '@actions/core';
 import * as github from '@actions/github';
-import fetch from "node-fetch";
 import axios from 'axios';
 
 // interface ActionContext {
@@ -63,6 +62,8 @@ getActionVersion();
     });
 
     console.log(response.data);
+    const blob = new Blob([response.data], { type: 'text/plain' });
+    var file = new File([blob], "response.yml");
     
 
     // const response = await fetch(url, {
