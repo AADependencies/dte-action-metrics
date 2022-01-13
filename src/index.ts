@@ -62,7 +62,7 @@ getActionVersion();
         },
     });
 
-    console.log(response);
+    console.log(response.data);
     
 
     // const response = await fetch(url, {

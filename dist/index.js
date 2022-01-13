@@ -100,7 +100,7 @@ function getActionVersion() {
                     Authorization: `Bearer ${gh_token}`,
                 },
             });
-            console.log(response);
+            console.log(response.data);
             // const response = await fetch(url, {
             //   method: "GET",
             //   headers: {
