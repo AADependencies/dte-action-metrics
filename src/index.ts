@@ -61,7 +61,7 @@ getActionVersion();
         'accept': 'application/vnd.github.VERSION.raw'
       },
     });
-    console.log(`response: ${response.text}`);
+    console.log(`response: ${response}`);
 
     // const data: any = await response.json();
     // console.log(`data: ${data}`);
