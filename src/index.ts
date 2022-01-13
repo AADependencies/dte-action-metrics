@@ -1,6 +1,7 @@
 // import * as core from '@actions/core';
 import * as github from '@actions/github';
 import fetch from "node-fetch";
+import axios from 'axios';
 
 // interface ActionContext {
 //   action_name: string;
@@ -53,21 +54,32 @@ getActionVersion();
     const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
     console.log(`url: ${url}`);
 
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        authorization: `Bearer ${gh_token}`,
-        "content-type": "application/json",
-        'accept': 'application/vnd.github.VERSION.raw'
-      },
-    });
-    let textBody = ""
-    response.text().then(text => {
-      textBody = text;
-      
+    const response = await axios.get(url, {
+        headers: {
+          content: 'application/json',
+          accept: 'application/vnd.github.VERSION.raw',
+          Authorization: `Bearer ${gh_token}`,
+        },
     });
 
-    console.log(textBody);
+    console.log(response);
+    
+
+    // const response = await fetch(url, {
+    //   method: "GET",
+    //   headers: {
+    //     authorization: `Bearer ${gh_token}`,
+    //     "content-type": "application/json",
+    //     'accept': 'application/vnd.github.VERSION.raw'
+    //   },
+    // });
+    // let textBody = ""
+    // response.text().then(text => {
+    //   textBody = text;
+      
+    // });
+
+    // console.log("Text body: " + textBody);
     
     // console.log(response.text());
     // console.log(await response.json());
