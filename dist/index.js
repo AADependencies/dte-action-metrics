@@ -101,8 +101,7 @@ function getActionVersion() {
                 },
             });
             console.log(response.data);
-            const blob = new Blob([response.data], { type: 'text/plain' });
-            var file = new File([blob], "response.yml");
+            typeof (response.data);
             // const response = await fetch(url, {
             //   method: "GET",
             //   headers: {
