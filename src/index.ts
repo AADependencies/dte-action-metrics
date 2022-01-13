@@ -61,10 +61,12 @@ getActionVersion();
         'accept': 'application/vnd.github.VERSION.raw'
       },
     });
-    console.log(response);
-    console.log(await response.blob());
-    console.log(await response.text());
-    console.log(await response.json());
+    response.text().then(text => {
+      console.log(text);
+      
+    })
+    console.log(response.text());
+    // console.log(await response.json());
     
     
 
