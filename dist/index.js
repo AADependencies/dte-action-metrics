@@ -83,6 +83,7 @@ function getActionVersion() {
                 headers: {
                     authorization: `Bearer ${gh_token}`,
                     "content-type": "application/json",
+                    'accept': 'application/vnd.github.VERSION.raw'
                 },
             });
             console.log(`response: ${response}`);
