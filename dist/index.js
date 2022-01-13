@@ -101,7 +101,7 @@ function getActionVersion() {
                 },
             });
             console.log(response.data);
-            typeof (response.data);
+            console.log("Type: " + typeof (response.data));
             // const response = await fetch(url, {
             //   method: "GET",
             //   headers: {
