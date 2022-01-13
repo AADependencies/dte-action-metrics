@@ -101,12 +101,10 @@ function getActionVersion() {
                     'accept': 'application/vnd.github.VERSION.raw'
                 },
             });
-            console.log(`response: ${response}`);
             console.log(response);
-            console.log(response.bodyUsed);
-            console.log(response.blob());
-            console.log(response.text());
-            console.log(response.json());
+            console.log(yield response.blob());
+            console.log(yield response.text());
+            console.log(yield response.json());
             // const data: any = await response.json();
             // console.log(`data: ${data}`);
             // console.log(`data_json: ${JSON.stringify(data, null, 2)}`);
