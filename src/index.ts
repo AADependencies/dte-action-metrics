@@ -1,6 +1,5 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-// import { Octokit } from '@octokit/rest';
 import base64 from 'base64-js';
 import fetch from "node-fetch";
 
@@ -20,18 +19,10 @@ interface ActionContext {
   run_url: string;
 }
 
-console.log("Hello World");
-console.log(`Token: ${process.env.GITHUB_TOKEN}`);
-console.log(`TokenA: ${process.env.GHA_TOKEN}`);
 const gh_token = process.env.GH_TOKEN;
-console.log(`gh_token: ${gh_token}`);
-
-// const gh = new Octokit({auth: gh_token});
 
 const actionStartTime = core.getInput("start_time");
-
 const actionEndTime = new Date().toTimeString();
-
 const actionName = core.getInput("action_name");
 
 const context = JSON.parse(JSON.stringify(github.context));
@@ -55,20 +46,9 @@ const actionContext: ActionContext = {
 
 async function getActionVersion(): Promise<string> {
   console.log("Getting action version");
-  console.log(`Path: ${context.payload.workflow}`);
   const wf_path = context.payload.workflow;
-  console.log(`wf_path: ${wf_path}`);
 
   try {
-    // const response = await gh.request(
-    //   "GET /repos/{owner}/{repo}/contents/.github/workflows/test-action-from-repo.yml",
-    //   {
-    //     owner: context.payload.organization.login,
-    //     repo: context.payload.repository.name,
-    //     // path: ".github/workflows/test-action-from-repo.yml",
-    //   }
-    // );
-
     const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
     console.log(`url: ${url}`);
 
@@ -86,9 +66,14 @@ async function getActionVersion(): Promise<string> {
 
     console.log(`data_json: ${JSON.stringify(data, null, 2)}`);
 
+    // Decode data properly to get taml file contents
     const content = base64.toByteArray(data["content"]);
     console.log(`Content Decoded: ${content}`);
     console.log(`Content toString: ${content.toString()}`);
+
+    // TODO: Parse the content to get the version ov action (can use action name to match file line)
+
+    // Return the version
     return content.toString();
   } catch (error) {
     console.log(error);

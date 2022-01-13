@@ -48,15 +48,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-// import { Octokit } from '@octokit/rest';
 const base64_js_1 = __importDefault(__nccwpck_require__(6463));
 const node_fetch_1 = __importDefault(__nccwpck_require__(7894));
-console.log("Hello World");
-console.log(`Token: ${process.env.GITHUB_TOKEN}`);
-console.log(`TokenA: ${process.env.GHA_TOKEN}`);
 const gh_token = process.env.GH_TOKEN;
-console.log(`gh_token: ${gh_token}`);
-// const gh = new Octokit({auth: gh_token});
 const actionStartTime = core.getInput("start_time");
 const actionEndTime = new Date().toTimeString();
 const actionName = core.getInput("action_name");
@@ -80,18 +74,8 @@ const actionContext = {
 function getActionVersion() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Getting action version");
-        console.log(`Path: ${context.payload.workflow}`);
         const wf_path = context.payload.workflow;
-        console.log(`wf_path: ${wf_path}`);
         try {
-            // const response = await gh.request(
-            //   "GET /repos/{owner}/{repo}/contents/.github/workflows/test-action-from-repo.yml",
-            //   {
-            //     owner: context.payload.organization.login,
-            //     repo: context.payload.repository.name,
-            //     // path: ".github/workflows/test-action-from-repo.yml",
-            //   }
-            // );
             const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
             console.log(`url: ${url}`);
             const response = yield (0, node_fetch_1.default)(url, {
@@ -105,9 +89,12 @@ function getActionVersion() {
             const data = yield response.json();
             console.log(`data: ${data}`);
             console.log(`data_json: ${JSON.stringify(data, null, 2)}`);
+            // Decode data properly to get taml file contents
             const content = base64_js_1.default.toByteArray(data["content"]);
             console.log(`Content Decoded: ${content}`);
             console.log(`Content toString: ${content.toString()}`);
+            // TODO: Parse the content to get the version ov action (can use action name to match file line)
+            // Return the version
             return content.toString();
         }
         catch (error) {
