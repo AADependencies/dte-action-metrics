@@ -1,50 +1,51 @@
-import * as core from '@actions/core';
+// import * as core from '@actions/core';
 import * as github from '@actions/github';
-import base64 from 'base64-js';
 import fetch from "node-fetch";
 
-interface ActionContext {
-  action_name: string;
-  actor: string;
-  repo_name: string;
-  action_version: Promise<string>;
-  start_time: string;
-  end_time: string;
-  workflow_name: string;
-  workflow_file: string;
-  workflow_trigger: string;
-  job_name: string;
-  sha: string;
-  repo_ref: string;
-  run_url: string;
-}
+// interface ActionContext {
+//   action_name: string;
+//   actor: string;
+//   repo_name: string;
+//   action_version: Promise<string>;
+//   start_time: string;
+//   end_time: string;
+//   workflow_name: string;
+//   workflow_file: string;
+//   workflow_trigger: string;
+//   job_name: string;
+//   sha: string;
+//   repo_ref: string;
+//   run_url: string;
+// }
 
 const gh_token = process.env.GH_TOKEN;
 
-const actionStartTime = core.getInput("start_time");
-const actionEndTime = new Date().toTimeString();
-const actionName = core.getInput("action_name");
+// const actionStartTime = core.getInput("start_time");
+// const actionEndTime = new Date().toTimeString();
+// const actionName = core.getInput("action_name");
 
 const context = JSON.parse(JSON.stringify(github.context));
 
 // create var of type ActionContext
-const actionContext: ActionContext = {
-  action_name: actionName,
-  actor: context.actor,
-  repo_name: context.payload.repository.name,
-  action_version: getActionVersion(),
-  start_time: actionStartTime,
-  end_time: actionEndTime,
-  workflow_name: context.workflow,
-  workflow_file: context.payload.repository.workflow,
-  workflow_trigger: context.eventName,
-  job_name: context.job,
-  sha: context.sha,
-  repo_ref: context.ref,
-  run_url: `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
-};
+// const actionContext: ActionContext = {
+//   action_name: actionName,
+//   actor: context.actor,
+//   repo_name: context.payload.repository.name,
+//   action_version: getActionVersion(),
+//   start_time: actionStartTime,
+//   end_time: actionEndTime,
+//   workflow_name: context.workflow,
+//   workflow_file: context.payload.repository.workflow,
+//   workflow_trigger: context.eventName,
+//   job_name: context.job,
+//   sha: context.sha,
+//   repo_ref: context.ref,
+//   run_url: `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
+// };
 
-async function getActionVersion(): Promise<string> {
+getActionVersion();
+
+ async function getActionVersion(): Promise<any>/*: Promise<string>*/ {
   console.log("Getting action version");
   const wf_path = context.payload.workflow;
 
@@ -60,22 +61,22 @@ async function getActionVersion(): Promise<string> {
         'accept': 'application/vnd.github.VERSION.raw'
       },
     });
-    console.log(`response: ${response}`);
+    console.log(`response: ${response.body}`);
 
-    const data: any = await response.json();
-    console.log(`data: ${data}`);
+    // const data: any = await response.json();
+    // console.log(`data: ${data}`);
 
-    console.log(`data_json: ${JSON.stringify(data, null, 2)}`);
+    // console.log(`data_json: ${JSON.stringify(data, null, 2)}`);
 
-    // Decode data properly to get taml file contents
-    const content = base64.toByteArray(data["content"]);
-    console.log(`Content Decoded: ${content}`);
-    console.log(`Content toString: ${content.toString()}`);
+    // // Decode data properly to get taml file contents
+    // const content = base64.toByteArray(data["content"]);
+    // console.log(`Content Decoded: ${content}`);
+    // console.log(`Content toString: ${content.toString()}`);
 
     // TODO: Parse the content to get the version ov action (can use action name to match file line)
 
     // Return the version
-    return content.toString();
+    // return response.body;
   } catch (error) {
     console.log(error);
     return "Failed to get version";
@@ -86,4 +87,4 @@ async function getActionVersion(): Promise<string> {
 // Will need eventhub name and data in call
 // Url might be an input to this action
 
-console.log(`Parsed Context: ${JSON.stringify(actionContext, null, 2)}`);
+// console.log(`Parsed Context: ${JSON.stringify(actionContext, null, 2)}`);
