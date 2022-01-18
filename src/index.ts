@@ -63,7 +63,7 @@ async function getActionVersion(): Promise<any>/*: Promise<string>*/ {
 
     const actionArray: string[] = response.data.split(" ");
 
-    actionArray.filter(x => x);
+    actionArray.join('').split('');
 
     console.log("Action array: " + actionArray);
     
