@@ -63,15 +63,10 @@ async function getActionVersion(): Promise<any>/*: Promise<string>*/ {
 
     const actionArray: string[] = response.data.split(" ");
 
-    for (let i = 0; i < actionArray.length; i++) {
-      if(actionArray[i] === "AAInternal/sonarscan") {
-        console.log(actionArray[i+2]);
-      } 
-      else {
-        console.log("Sonarscan not found");
-      }
+    actionArray.forEach(element => {
+      console.log(element);
       
-    }
+    });
 
     // TODO: Parse the content to get the version ov action (can use action name to match file line)
 
