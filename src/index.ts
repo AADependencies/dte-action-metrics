@@ -66,7 +66,7 @@ async function getActionVersion(): Promise<any>/*: Promise<string>*/ {
     const length = actionArray.length;
 
     for(let i = 0; i < length; i++ )
-      actionArray[i] && actionArray.push(actionArray[i]);
+      actionArray[i] && actionArray.push(actionArray[i].replace(/(\r\n|\n|\r)/gm, ""));
 
     actionArray.splice(0, length);
 
