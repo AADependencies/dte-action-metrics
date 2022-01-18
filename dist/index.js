@@ -100,7 +100,8 @@ function getActionVersion() {
                     Authorization: `Bearer ${gh_token}`,
                 },
             });
-            console.log(response.data);
+            const strArray = response.data.split(" ");
+            console.log(strArray[0]);
             // const data: any = await response.json();
             // console.log(`data: ${data}`);
             // console.log(`data_json: ${JSON.stringify(data, null, 2)}`);
