@@ -101,7 +101,7 @@ function getActionVersion() {
                 },
             });
             const actionArray = response.data.split(" ");
-            actionArray.filter(x => x);
+            actionArray.join('').split('');
             console.log("Action array: " + actionArray);
             // TODO: Parse the content to get the version ov action (can use action name to match file line)
             // Return the version
