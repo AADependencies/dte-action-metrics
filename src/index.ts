@@ -65,12 +65,16 @@ async function getActionVersion(): Promise<any>/*: Promise<string>*/ {
 
     const length = actionArray.length;
 
-    for(let i = 0; i < length; i++ )
+    for(let i = 0; i < length; i++ ) {
       actionArray[i] && actionArray.push(actionArray[i].replace(/(\r\n|\n|\r)/gm, ""));
-
+    }
     actionArray.splice(0, length);
 
-    console.log("Action array: " + actionArray);
+    actionArray.forEach(element => {
+      if(element === 'AAInternal/sonarscan') {
+        console.log("Found sonarscan repo");
+      }
+    });
     
 
     // TODO: Parse the content to get the version ov action (can use action name to match file line)
