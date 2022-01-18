@@ -61,9 +61,9 @@ async function getActionVersion(): Promise<any>/*: Promise<string>*/ {
         },
     });
 
-    const actionArray: string[] = response.data.split(" ");
+    // const actionArray: string[] = response.data.split(" ");
 
-    console.log(actionArray[0]);
+    console.log(response.data);
 
     // TODO: Parse the content to get the version ov action (can use action name to match file line)
 
