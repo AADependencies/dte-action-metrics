@@ -101,22 +101,6 @@ function getActionVersion() {
                 },
             });
             console.log(response.data);
-            console.log("Type: " + typeof (response.data));
-            // const response = await fetch(url, {
-            //   method: "GET",
-            //   headers: {
-            //     authorization: `Bearer ${gh_token}`,
-            //     "content-type": "application/json",
-            //     'accept': 'application/vnd.github.VERSION.raw'
-            //   },
-            // });
-            // let textBody = ""
-            // response.text().then(text => {
-            //   textBody = text;
-            // });
-            // console.log("Text body: " + textBody);
-            // console.log(response.text());
-            // console.log(await response.json());
             // const data: any = await response.json();
             // console.log(`data: ${data}`);
             // console.log(`data_json: ${JSON.stringify(data, null, 2)}`);

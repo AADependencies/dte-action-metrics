@@ -45,7 +45,7 @@ const context = JSON.parse(JSON.stringify(github.context));
 
 getActionVersion();
 
- async function getActionVersion(): Promise<any>/*: Promise<string>*/ {
+async function getActionVersion(): Promise<any>/*: Promise<string>*/ {
   console.log("Getting action version");
   const wf_path = context.payload.workflow;
 
@@ -62,29 +62,6 @@ getActionVersion();
     });
 
     console.log(response.data);
-    console.log("Type: " + typeof(response.data));
-    
-
-    // const response = await fetch(url, {
-    //   method: "GET",
-    //   headers: {
-    //     authorization: `Bearer ${gh_token}`,
-    //     "content-type": "application/json",
-    //     'accept': 'application/vnd.github.VERSION.raw'
-    //   },
-    // });
-    // let textBody = ""
-    // response.text().then(text => {
-    //   textBody = text;
-      
-    // });
-
-    // console.log("Text body: " + textBody);
-    
-    // console.log(response.text());
-    // console.log(await response.json());
-    
-    
 
     // const data: any = await response.json();
     // console.log(`data: ${data}`);
