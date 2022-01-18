@@ -100,15 +100,8 @@ function getActionVersion() {
                     Authorization: `Bearer ${gh_token}`,
                 },
             });
-            const strArray = response.data.split(" ");
-            console.log(strArray[0]);
-            // const data: any = await response.json();
-            // console.log(`data: ${data}`);
-            // console.log(`data_json: ${JSON.stringify(data, null, 2)}`);
-            // // Decode data properly to get taml file contents
-            // const content = base64.toByteArray(data["content"]);
-            // console.log(`Content Decoded: ${content}`);
-            // console.log(`Content toString: ${content.toString()}`);
+            // const actionArray: string[] = response.data.split(" ");
+            console.log(response.data);
             // TODO: Parse the content to get the version ov action (can use action name to match file line)
             // Return the version
             // return response.body;
