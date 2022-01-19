@@ -101,8 +101,10 @@ function getActionVersion() {
                 },
             });
             const actionArray = response.data.split(" ");
+            console.log(actionArray);
             const ref = getRef(actionArray);
-            console.log("Ref: " + ref);
+            // console.log("Ref: " + ref);
+            return ref;
             // TODO: Parse the content to get the version ov action (can use action name to match file line)
             // Return the version
             // return response.body;
@@ -134,7 +136,7 @@ function getRef(arr) {
             }
         }
     }
-    return "NOT FOUND";
+    return "REF NOT FOUND";
 }
 // TO-DO - send to micro-service
 // Will need eventhub name and data in call
