@@ -1,4 +1,4 @@
-import * as core from '@actions/core';
+// import * as core from '@actions/core';
 import * as github from '@actions/github';
 import axios from 'axios';
 
@@ -22,8 +22,7 @@ const gh_token = process.env.GH_TOKEN;
 
 // const actionStartTime = core.getInput("start_time");
 // const actionEndTime = new Date().toTimeString();
-const actionName = core.getInput("action_name");
-console.log("Action name: " + actionName);
+// const actionName = core.getInput("action_name");
 
 
 const context = JSON.parse(JSON.stringify(github.context));
@@ -32,7 +31,7 @@ const context = JSON.parse(JSON.stringify(github.context));
 // const actionContext: ActionContext = {
 //   action_name: actionName,
 //   actor: context.actor,
-//   repo_name: context.payload.repository.name,
+// repo_name: context.payload.repository.name,
 //   action_version: getActionVersion(),
 //   start_time: actionStartTime,
 //   end_time: actionEndTime,
@@ -44,7 +43,7 @@ const context = JSON.parse(JSON.stringify(github.context));
 //   repo_ref: context.ref,
 //   run_url: `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
 // };
-
+console.log("Name: " + context.payload.repository.name)
 getActionVersion();
 
 async function getActionVersion(): Promise<string> {
