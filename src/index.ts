@@ -1,6 +1,7 @@
 // import * as core from '@actions/core';
 import * as github from '@actions/github';
 import axios from 'axios';
+import YAML from 'yaml';
 
 // interface ActionContext {
 //   action_name: string;
@@ -43,10 +44,10 @@ const context = JSON.parse(JSON.stringify(github.context));
 //   repo_ref: context.ref,
 //   run_url: `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
 // };
-console.log("Name: " + context.ref)
+
 getActionVersion();
 
-async function getActionVersion(): Promise<string> {
+async function getActionVersion() /*Promise<string>*/ {
   console.log("Getting action version");
   const wf_path = context.payload.workflow;
 
@@ -62,13 +63,18 @@ async function getActionVersion(): Promise<string> {
         },
     });
 
-    const actionArray: string[] = response.data.split(" ");
+
+    const doc = YAML.parseDocument(response.data);
+    console.log(doc.contents);
     
-    const ref: string = getRef(actionArray);
 
-    console.log("Ref: " + ref);
+    // const actionArray: string[] = response.data.split(" ");
+    
+    // const ref: string = getRef(actionArray);
 
-    return ref;
+    // console.log("Ref: " + ref);
+
+    // return ref;
     // TODO: Parse the content to get the version ov action (can use action name to match file line)
 
     // Return the version
