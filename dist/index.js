@@ -88,6 +88,7 @@ const context = JSON.parse(JSON.stringify(github.context));
 // };
 getActionVersion();
 function getActionVersion() {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Getting action version");
         const wf_path = context.payload.workflow;
@@ -102,8 +103,9 @@ function getActionVersion() {
                 },
             });
             const doc = yaml_1.default.parseDocument(response.data);
-            const { anchors, contents } = doc;
-            console.log(anchors.getNames());
+            // const {anchors, contents} = doc;
+            // const a = contents.items
+            console.log((_a = doc.contents) === null || _a === void 0 ? void 0 : _a.toJSON);
             // const actionArray: string[] = response.data.split(" ");
             // const ref: string = getRef(actionArray);
             // console.log("Ref: " + ref);
