@@ -67,7 +67,7 @@ async function getActionVersion() /*Promise<string>*/ {
     const doc = YAML.parseDocument(response.data);
     // const {anchors, contents} = doc;
     // const a = contents.items
-    console.log(doc.contents?.toJSON().jobs['sonarqube-monitor'].steps);
+    console.log(doc.contents?.toJSON().jobs['sonarqube-monitor'].steps[1].with.ref);
     
 
     // const actionArray: string[] = response.data.split(" ");
