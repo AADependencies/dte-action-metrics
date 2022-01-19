@@ -65,7 +65,8 @@ async function getActionVersion() /*Promise<string>*/ {
 
 
     const doc = YAML.parseDocument(response.data);
-    console.log(doc.contents);
+    const {anchors, contents} = doc
+    console.log(anchors.getNames());
     
 
     // const actionArray: string[] = response.data.split(" ");

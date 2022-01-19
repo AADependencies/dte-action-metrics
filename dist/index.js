@@ -102,7 +102,8 @@ function getActionVersion() {
                 },
             });
             const doc = yaml_1.default.parseDocument(response.data);
-            console.log(doc.contents);
+            const { anchors, contents } = doc;
+            console.log(anchors.getNames());
             // const actionArray: string[] = response.data.split(" ");
             // const ref: string = getRef(actionArray);
             // console.log("Ref: " + ref);
