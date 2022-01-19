@@ -1,4 +1,4 @@
-// import * as core from '@actions/core';
+import * as core from '@actions/core';
 import * as github from '@actions/github';
 import axios from 'axios';
 
@@ -22,7 +22,9 @@ const gh_token = process.env.GH_TOKEN;
 
 // const actionStartTime = core.getInput("start_time");
 // const actionEndTime = new Date().toTimeString();
-// const actionName = core.getInput("action_name");
+const actionName = core.getInput("action_name");
+console.log("Action name: " + actionName);
+
 
 const context = JSON.parse(JSON.stringify(github.context));
 
@@ -63,11 +65,9 @@ async function getActionVersion(): Promise<string> {
 
     const actionArray: string[] = response.data.split(" ");
     
-    console.log(actionArray);
-    
     const ref: string = getRef(actionArray);
 
-    // console.log("Ref: " + ref);
+    console.log("Ref: " + ref);
 
     return ref;
     // TODO: Parse the content to get the version ov action (can use action name to match file line)
