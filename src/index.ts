@@ -43,7 +43,7 @@ const context = JSON.parse(JSON.stringify(github.context));
 //   repo_ref: context.ref,
 //   run_url: `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
 // };
-console.log("Name: " + context.payload.repository.name)
+console.log("Name: " + context.ref)
 getActionVersion();
 
 async function getActionVersion(): Promise<string> {
