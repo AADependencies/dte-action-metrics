@@ -45,7 +45,7 @@ const context = JSON.parse(JSON.stringify(github.context));
 
 getActionVersion();
 
-async function getActionVersion(): Promise<any>/*: Promise<string>*/ {
+async function getActionVersion(): Promise<string> {
   console.log("Getting action version");
   const wf_path = context.payload.workflow;
 
@@ -67,6 +67,7 @@ async function getActionVersion(): Promise<any>/*: Promise<string>*/ {
 
     console.log("Ref: " + ref);
 
+    return ref;
     // TODO: Parse the content to get the version ov action (can use action name to match file line)
 
     // Return the version
@@ -102,7 +103,7 @@ function getRef(arr: string[]): string {
     }
   }
 
-  return "NOT FOUND";
+  return "REF NOT FOUND";
 }
 
 // TO-DO - send to micro-service
