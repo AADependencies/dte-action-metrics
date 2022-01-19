@@ -101,16 +101,8 @@ function getActionVersion() {
                 },
             });
             const actionArray = response.data.split(" ");
-            const length = actionArray.length;
-            for (let i = 0; i < length; i++) {
-                actionArray[i] && actionArray.push(actionArray[i].replace(/(\r\n|\n|\r)/gm, ""));
-            }
-            actionArray.splice(0, length);
-            actionArray.forEach(element => {
-                if (element === 'AAInternal/sonarscan') {
-                    console.log("Found sonarscan repo");
-                }
-            });
+            const ref = getRef(actionArray);
+            console.log("Ref: " + ref);
             // TODO: Parse the content to get the version ov action (can use action name to match file line)
             // Return the version
             // return response.body;
@@ -120,6 +112,29 @@ function getActionVersion() {
             return "Failed to get version";
         }
     });
+}
+function getRef(arr) {
+    const length = arr.length;
+    for (let i = 0; i < length; i++) {
+        arr[i] && arr.push(arr[i].replace(/(\r\n|\n|\r)/gm, ""));
+    }
+    arr.splice(0, length);
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === 'AAInternal/sonarscan') {
+            let backward = i - 1, forward = (i + 1 < arr.length) ? i + 1 : i;
+            while (backward > 0 || forward < arr.length) {
+                if (backward > 0 && arr[backward] === 'ref:') {
+                    return arr[backward + 1];
+                }
+                if (forward < arr.length && arr[forward] === 'ref:') {
+                    return arr[forward + 1];
+                }
+                backward--;
+                forward++;
+            }
+        }
+    }
+    return "NOT FOUND";
 }
 // TO-DO - send to micro-service
 // Will need eventhub name and data in call
