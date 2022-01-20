@@ -1,4 +1,4 @@
-// import * as core from '@actions/core';
+import * as core from '@actions/core';
 import * as github from '@actions/github';
 import axios from 'axios';
 import YAML from 'yaml';
@@ -23,7 +23,7 @@ const gh_token = process.env.GH_TOKEN;
 
 // const actionStartTime = core.getInput("start_time");
 // const actionEndTime = new Date().toTimeString();
-// const actionName = core.getInput("action_name");
+const actionName = core.getInput("action_name");
 
 
 const context = JSON.parse(JSON.stringify(github.context));
@@ -67,12 +67,17 @@ async function getActionVersion() /*Promise<string>*/ {
     const doc = YAML.parseDocument(response.data);
     // const {anchors, contents} = doc;
     // const a = contents.items
-    console.log(doc.contents?.toJSON().jobs['sonarqube-monitor'].steps[1].with.ref);
+    console.log("Goal: " + doc.contents?.toJSON().jobs['sonarqube-monitor'].steps[1].with.ref);
 
     const steps = doc.contents?.toJSON().jobs[context.job].steps;
+    const repo = "AAInternal/" + actionName;
+    console.log("Repo: " + repo);
+    
 
     for(const step of Object.keys(steps)) {
-      console.log(step + " -> " + steps[step]);
+      // eslint-disable-next-line no-prototype-builtins
+      const stepWith = steps[step].hasOwnProperty('with') ? steps[step].with : null;
+      console.log("stepWith: " + stepWith);
     }
 
     // const actionArray: string[] = response.data.split(" ");
