@@ -46,6 +46,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+/* eslint-disable no-prototype-builtins */
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
@@ -107,13 +108,22 @@ function getActionVersion() {
             // const a = contents.items
             console.log("Goal: " + ((_a = doc.contents) === null || _a === void 0 ? void 0 : _a.toJSON().jobs['sonarqube-monitor'].steps[1].with.ref));
             const steps = (_b = doc.contents) === null || _b === void 0 ? void 0 : _b.toJSON().jobs[context.job].steps;
-            const repo = "AAInternal/" + actionName;
-            console.log("Repo: " + repo);
+            // const repo = "AAInternal/" + actionName;
+            const targetRepo = "AAInternal/sonarscan";
             for (const step of Object.keys(steps)) {
-                // eslint-disable-next-line no-prototype-builtins
                 const stepWith = steps[step].hasOwnProperty('with') ? steps[step].with : null;
-                console.log("stepWith: " + stepWith);
+                if (stepWith !== null) {
+                    const stepRepo = stepWith.hasOwnProperty('repository') ? stepWith.repository : null;
+                    if (stepRepo === targetRepo) {
+                        console.log("Target: " + stepWith.ref);
+                        return stepWith.ref;
+                    }
+                }
+                else {
+                    continue;
+                }
             }
+            return "REF NOT FOUND";
             // const actionArray: string[] = response.data.split(" ");
             // const ref: string = getRef(actionArray);
             // console.log("Ref: " + ref);
