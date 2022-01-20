@@ -117,7 +117,7 @@ function getActionVersion() {
 // TO-DO - send to micro-service
 // Will need eventhub name and data in call
 // Url might be an input to this action
-console.log(`Parsed Context: ${JSON.stringify(getActionContext(), null, 2)}`);
+console.log(getActionContext());
 
 
 /***/ }),
