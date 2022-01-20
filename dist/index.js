@@ -117,7 +117,9 @@ function getActionVersion() {
 // TO-DO - send to micro-service
 // Will need eventhub name and data in call
 // Url might be an input to this action
-console.log(getActionContext());
+() => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(yield getActionContext());
+});
 
 
 /***/ }),

@@ -92,5 +92,7 @@ async function getActionVersion(): Promise<string> {
 // TO-DO - send to micro-service
 // Will need eventhub name and data in call
 // Url might be an input to this action
+async () => {
+  console.log(await getActionContext());
+}
 
-console.log(getActionContext());
