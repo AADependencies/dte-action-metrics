@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import axios from 'axios';
@@ -70,15 +71,24 @@ async function getActionVersion() /*Promise<string>*/ {
     console.log("Goal: " + doc.contents?.toJSON().jobs['sonarqube-monitor'].steps[1].with.ref);
 
     const steps = doc.contents?.toJSON().jobs[context.job].steps;
-    const repo = "AAInternal/" + actionName;
-    console.log("Repo: " + repo);
-    
+    // const repo = "AAInternal/" + actionName;
+    const targetRepo = "AAInternal/sonarscan";   
 
     for(const step of Object.keys(steps)) {
-      // eslint-disable-next-line no-prototype-builtins
       const stepWith = steps[step].hasOwnProperty('with') ? steps[step].with : null;
-      console.log("stepWith: " + stepWith);
+      if(stepWith !== null) {
+        const stepRepo = stepWith.hasOwnProperty('repository') ? stepWith.repository : null;
+        if(stepRepo === targetRepo) {
+          console.log("Target: " + stepWith.ref);
+          
+          return stepWith.ref;
+        }
+      } else {
+        continue;
+      }
     }
+
+    return "REF NOT FOUND";
 
     // const actionArray: string[] = response.data.split(" ");
     
