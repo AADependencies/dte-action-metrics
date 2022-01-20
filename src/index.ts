@@ -92,7 +92,9 @@ async function getActionVersion(): Promise<string> {
 // TO-DO - send to micro-service
 // Will need eventhub name and data in call
 // Url might be an input to this action
-async () => {
+async function printContext() {
   console.log(await getActionContext());
 }
+
+printContext();
 
