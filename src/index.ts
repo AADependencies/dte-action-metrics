@@ -68,7 +68,12 @@ async function getActionVersion() /*Promise<string>*/ {
     // const {anchors, contents} = doc;
     // const a = contents.items
     console.log(doc.contents?.toJSON().jobs['sonarqube-monitor'].steps[1].with.ref);
-    
+
+    const jobs = doc.contents?.toJSON().jobs;
+
+    for (const job of Object.keys(jobs)) {
+      console.log(job + " -> " + jobs[job]);
+    }
 
     // const actionArray: string[] = response.data.split(" ");
     
