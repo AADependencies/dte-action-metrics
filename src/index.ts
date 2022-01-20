@@ -8,7 +8,7 @@ type ActionContext = {
   action_name: string;
   actor: string;
   repo_name: string;
-  action_version: Promise<string>;
+  action_version: string;
   start_time: string;
   end_time: string;
   workflow_name: string;
@@ -29,27 +29,26 @@ const actionName = core.getInput("action_name");
 
 const context = JSON.parse(JSON.stringify(github.context));
 
-// create var of type ActionContext
-const actionContext: ActionContext = {
-  action_name: actionName,
-  actor: context.actor,
-  repo_name: context.payload.repository.name,
-  action_version: getActionVersion(),
-  start_time: actionStartTime,
-  end_time: actionEndTime,
-  workflow_name: context.workflow,
-  workflow_file: context.payload.repository.workflow,
-  workflow_trigger: context.eventName,
-  job_name: context.job,
-  sha: context.sha,
-  repo_ref: context.ref,
-  run_url: `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
-};
+async function getActionContext() : Promise<ActionContext> {
+  return {
+    action_name: actionName,
+    actor: context.actor,
+    repo_name: context.payload.repository.name,
+    action_version: await getActionVersion(),
+    start_time: actionStartTime,
+    end_time: actionEndTime,
+    workflow_name: context.workflow,
+    workflow_file: context.payload.repository.workflow,
+    workflow_trigger: context.eventName,
+    job_name: context.job,
+    sha: context.sha,
+    repo_ref: context.ref,
+    run_url: `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
+  };
+}
 
-console.log(actionContext);
 
-
-async function getActionVersion() /*Promise<string>*/ {
+async function getActionVersion(): Promise<string> {
   console.log("Getting action version");
   const wf_path = context.payload.workflow;
 
@@ -64,7 +63,6 @@ async function getActionVersion() /*Promise<string>*/ {
           Authorization: `Bearer ${gh_token}`,
         },
     });
-
 
     const doc = YAML.parseDocument(response.data);
 
@@ -95,4 +93,4 @@ async function getActionVersion() /*Promise<string>*/ {
 // Will need eventhub name and data in call
 // Url might be an input to this action
 
-// console.log(`Parsed Context: ${JSON.stringify(actionContext, null, 2)}`);
+console.log(`Parsed Context: ${JSON.stringify(getActionContext(), null, 2)}`);

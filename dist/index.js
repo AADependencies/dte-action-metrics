@@ -56,23 +56,25 @@ const actionStartTime = core.getInput("start_time");
 const actionEndTime = new Date().toTimeString();
 const actionName = core.getInput("action_name");
 const context = JSON.parse(JSON.stringify(github.context));
-// create var of type ActionContext
-const actionContext = {
-    action_name: actionName,
-    actor: context.actor,
-    repo_name: context.payload.repository.name,
-    action_version: getActionVersion(),
-    start_time: actionStartTime,
-    end_time: actionEndTime,
-    workflow_name: context.workflow,
-    workflow_file: context.payload.repository.workflow,
-    workflow_trigger: context.eventName,
-    job_name: context.job,
-    sha: context.sha,
-    repo_ref: context.ref,
-    run_url: `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
-};
-console.log(actionContext);
+function getActionContext() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return {
+            action_name: actionName,
+            actor: context.actor,
+            repo_name: context.payload.repository.name,
+            action_version: yield getActionVersion(),
+            start_time: actionStartTime,
+            end_time: actionEndTime,
+            workflow_name: context.workflow,
+            workflow_file: context.payload.repository.workflow,
+            workflow_trigger: context.eventName,
+            job_name: context.job,
+            sha: context.sha,
+            repo_ref: context.ref,
+            run_url: `${context.payload.repository.html_url}/actions/runs/${context.runId}`,
+        };
+    });
+}
 function getActionVersion() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -115,7 +117,7 @@ function getActionVersion() {
 // TO-DO - send to micro-service
 // Will need eventhub name and data in call
 // Url might be an input to this action
-// console.log(`Parsed Context: ${JSON.stringify(actionContext, null, 2)}`);
+console.log(`Parsed Context: ${JSON.stringify(getActionContext(), null, 2)}`);
 
 
 /***/ }),
