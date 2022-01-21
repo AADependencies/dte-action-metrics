@@ -54,7 +54,6 @@ async function getActionVersion(): Promise<string> {
 
   try {
     const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
-    console.log(`url: ${url}`);
 
     const response = await axios.get(url, {
         headers: {
@@ -95,17 +94,22 @@ async function getActionVersion(): Promise<string> {
 
 
 async function sendDataToADXSender() {
-  const actionContextData = await getActionContext();
-
-  const request = await axios.post(actionURL, {
+  const actionContextData = {
+    "eventhub_name": "github_actions",
+    "data": await getActionContext()
+  };
+  console.log(actionContextData);
+  console.log("Action URL: " + actionURL);
+  
+  const request = await axios.post(actionURL, actionContextData,{
       headers: {
         content: 'application/json',
         Authorization: `Bearer ${gh_token}`,
       },
-      data: {
-        "eventhub_name": "github_actions",
-        "data": actionContextData
-      }
+      // data: {
+      //   "eventhub_name": "github_actions",
+      //   "data": actionContextData
+      // }
   });
 
   return request;

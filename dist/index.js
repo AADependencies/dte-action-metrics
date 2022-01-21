@@ -83,7 +83,6 @@ function getActionVersion() {
         const wf_path = context.payload.workflow;
         try {
             const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
-            console.log(`url: ${url}`);
             const response = yield axios_1.default.get(url, {
                 headers: {
                     content: 'application/json',
@@ -121,16 +120,21 @@ function getActionVersion() {
 }
 function sendDataToADXSender() {
     return __awaiter(this, void 0, void 0, function* () {
-        const actionContextData = yield getActionContext();
-        const request = yield axios_1.default.post(actionURL, {
+        const actionContextData = {
+            "eventhub_name": "github_actions",
+            "data": yield getActionContext()
+        };
+        console.log(actionContextData);
+        console.log("Action URL: " + actionURL);
+        const request = yield axios_1.default.post(actionURL, actionContextData, {
             headers: {
                 content: 'application/json',
                 Authorization: `Bearer ${gh_token}`,
             },
-            data: {
-                "eventhub_name": "github_actions",
-                "data": actionContextData
-            }
+            // data: {
+            //   "eventhub_name": "github_actions",
+            //   "data": actionContextData
+            // }
         });
         return request;
     });
