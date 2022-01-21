@@ -1,15 +1,14 @@
 /* eslint-disable no-prototype-builtins */
-import * as core from '@actions/core';
 import * as github from '@actions/github';
 import axios from 'axios';
 import YAML from 'yaml';
 
 type ActionContext = {
-  action_name: string;
+  action_name: string | undefined;
   actor: string;
   repo_name: string;
   action_version: string;
-  start_time: string;
+  start_time: string | undefined;
   end_time: string;
   workflow_name: string;
   workflow_file: string;
@@ -22,10 +21,10 @@ type ActionContext = {
 
 const gh_token = process.env.GH_TOKEN;
 
-const actionStartTime = core.getInput("start_time");
+const actionStartTime = process.env.START_TIME;
 const actionEndTime = new Date().toTimeString();
-const actionName = core.getInput("action_name");
-const actionURL = core.getInput("action_url");
+const actionName = process.env.ACTION_NAME;
+const actionURL = process.env.ACTION_URL;
 
 const context = JSON.parse(JSON.stringify(github.context));
 
@@ -101,7 +100,7 @@ async function sendDataToADXSender() {
   console.log(actionContextData);
   console.log("Action URL: " + actionURL);
   
-  const request = await axios.post(actionURL, actionContextData,{
+  const request = await axios.post(actionURL as string, actionContextData,{
       headers: {
         content: 'application/json',
         Authorization: `Bearer ${gh_token}`,

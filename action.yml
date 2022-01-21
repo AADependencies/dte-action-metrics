@@ -28,6 +28,9 @@ runs:
       id: metrics
       env:
         GH_TOKEN: ${{ github.token }}
+        ACTION_NAME: ${{ inputs.action_name }}
+        START_TIME: ${{ inputs.start_time }}
+        ACTION_URL: ${{ inputs.action_url }}
       run: |
         node ${{ github.action_path }}/dist/index.js
       shell: bash
