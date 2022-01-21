@@ -9,6 +9,9 @@ inputs:
   start_time:
     description: Time action started
     required: true
+  action_url:
+    description: URL for ADX service
+    required: true
 
 runs:
   using: 'composite'
