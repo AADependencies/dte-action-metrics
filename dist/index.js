@@ -55,6 +55,7 @@ const gh_token = process.env.GH_TOKEN;
 const actionStartTime = core.getInput("start_time");
 const actionEndTime = new Date().toTimeString();
 const actionName = core.getInput("action_name");
+const actionURL = core.getInput("action_url");
 const context = JSON.parse(JSON.stringify(github.context));
 function getActionContext() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -92,21 +93,25 @@ function getActionVersion() {
             });
             const doc = yaml_1.default.parseDocument(response.data);
             const steps = (_a = doc.contents) === null || _a === void 0 ? void 0 : _a.toJSON().jobs[context.job].steps;
-            // const targetRepo = "AAInternal/" + actionName;
-            const targetRepo = "AAInternal/sonarscan";
+            const targetRepo = "AAInternal/" + actionName;
             for (const step of Object.keys(steps)) {
                 const stepWith = steps[step].hasOwnProperty('with') ? steps[step].with : null;
                 if (stepWith !== null) {
                     const stepRepo = stepWith.hasOwnProperty('repository') ? stepWith.repository : null;
-                    if (stepRepo === targetRepo && stepWith.hasOwnProperty('ref')) {
-                        return stepWith.ref;
+                    if (stepRepo === targetRepo) {
+                        if (stepWith.hasOwnProperty('ref')) {
+                            return stepWith.ref;
+                        }
+                        else {
+                            return "default branch";
+                        }
                     }
                 }
                 else {
                     continue;
                 }
             }
-            return "VERSION NOT FOUND";
+            return "N/A";
         }
         catch (error) {
             console.log(error);
@@ -114,15 +119,28 @@ function getActionVersion() {
         }
     });
 }
-// TO-DO - send to micro-service
-// Will need eventhub name and data in call
-// Url might be an input to this action
-function printContext() {
+function sendDataToADXSender() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(yield getActionContext());
+        const actionContextData = yield getActionContext();
+        const request = yield axios_1.default.post(actionURL, {
+            headers: {
+                content: 'application/json',
+                Authorization: `Bearer ${gh_token}`,
+            },
+            data: {
+                "eventhub_name": "github_actions",
+                "data": actionContextData
+            }
+        });
+        return request;
     });
 }
-printContext();
+function printRequest() {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(yield sendDataToADXSender());
+    });
+}
+printRequest();
 
 
 /***/ }),

@@ -25,7 +25,7 @@ const gh_token = process.env.GH_TOKEN;
 const actionStartTime = core.getInput("start_time");
 const actionEndTime = new Date().toTimeString();
 const actionName = core.getInput("action_name");
-
+const actionURL = core.getInput("action_url");
 
 const context = JSON.parse(JSON.stringify(github.context));
 
@@ -67,34 +67,53 @@ async function getActionVersion(): Promise<string> {
     const doc = YAML.parseDocument(response.data);
 
     const steps = doc.contents?.toJSON().jobs[context.job].steps;
-    // const targetRepo = "AAInternal/" + actionName;
-    const targetRepo = "AAInternal/sonarscan";   
+    const targetRepo = "AAInternal/" + actionName;
 
     for(const step of Object.keys(steps)) {
       const stepWith = steps[step].hasOwnProperty('with') ? steps[step].with : null;
       if(stepWith !== null) {
         const stepRepo = stepWith.hasOwnProperty('repository') ? stepWith.repository : null;
-        if(stepRepo === targetRepo && stepWith.hasOwnProperty('ref')) {
-          return stepWith.ref;
+        if(stepRepo === targetRepo) {
+          if(stepWith.hasOwnProperty('ref')) {
+            return stepWith.ref;
+          }
+          else {
+            return "default branch";
+          }
         }
       } else {
         continue;
       }
     }
 
-    return "VERSION NOT FOUND";
+    return "N/A";
   } catch (error) {
     console.log(error);
     return "Failed to get version";
   }
 }
 
-// TO-DO - send to micro-service
-// Will need eventhub name and data in call
-// Url might be an input to this action
-async function printContext() {
-  console.log(await getActionContext());
+
+async function sendDataToADXSender() {
+  const actionContextData = await getActionContext();
+
+  const request = await axios.post(actionURL, {
+      headers: {
+        content: 'application/json',
+        Authorization: `Bearer ${gh_token}`,
+      },
+      data: {
+        "eventhub_name": "github_actions",
+        "data": actionContextData
+      }
+  });
+
+  return request;
 }
 
-printContext();
+async function printRequest() {
+  console.log(await sendDataToADXSender());
+}
+
+printRequest();
 
