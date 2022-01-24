@@ -20,8 +20,8 @@ type ActionContext = {
 }
 
 const gh_token = process.env.GH_TOKEN;
-const actionStartTime = new Date(String(process.env.START_TIME)).toISOString().split(".")[0];
-const actionEndTime = new Date().toISOString().split(".")[0];
+const actionStartTime = new Date(String(process.env.START_TIME)).toISOString();
+const actionEndTime = new Date().toISOString();
 const actionName = process.env.ACTION_NAME;
 const actionURL = process.env.ACTION_URL;
 
