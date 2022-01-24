@@ -20,9 +20,8 @@ type ActionContext = {
 }
 
 const gh_token = process.env.GH_TOKEN;
-
-const actionStartTime = process.env.START_TIME;
-const actionEndTime = new Date().toTimeString();
+const actionStartTime = new Date(String(process.env.START_TIME)).toISOString().split(".")[0];
+const actionEndTime = new Date().toISOString().split(".")[0];
 const actionName = process.env.ACTION_NAME;
 const actionURL = process.env.ACTION_URL;
 
@@ -37,7 +36,7 @@ async function getActionContext() : Promise<ActionContext> {
     start_time: actionStartTime,
     end_time: actionEndTime,
     workflow_name: context.workflow,
-    workflow_file: context.payload.repository.workflow,
+    workflow_file: context.payload.workflow.split("/").pop(),
     workflow_trigger: context.eventName,
     job_name: context.job,
     sha: context.sha,

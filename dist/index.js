@@ -51,8 +51,8 @@ const github = __importStar(__nccwpck_require__(5438));
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const yaml_1 = __importDefault(__nccwpck_require__(3552));
 const gh_token = process.env.GH_TOKEN;
-const actionStartTime = process.env.START_TIME;
-const actionEndTime = new Date().toTimeString();
+const actionStartTime = new Date(String(process.env.START_TIME)).toISOString().split(".")[0];
+const actionEndTime = new Date().toISOString().split(".")[0];
 const actionName = process.env.ACTION_NAME;
 const actionURL = process.env.ACTION_URL;
 const context = JSON.parse(JSON.stringify(github.context));
@@ -66,7 +66,7 @@ function getActionContext() {
             start_time: actionStartTime,
             end_time: actionEndTime,
             workflow_name: context.workflow,
-            workflow_file: context.payload.repository.workflow,
+            workflow_file: context.payload.workflow.split("/").pop(),
             workflow_trigger: context.eventName,
             job_name: context.job,
             sha: context.sha,
