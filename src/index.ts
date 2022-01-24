@@ -8,8 +8,8 @@ type ActionContext = {
   actor: string;
   repo_name: string;
   action_version: string;
-  start_time: string | undefined;
-  end_time: string;
+  start_time: Date | undefined;
+  end_time: Date;
   workflow_name: string;
   workflow_file: string;
   workflow_trigger: string;
@@ -20,8 +20,8 @@ type ActionContext = {
 }
 
 const gh_token = process.env.GH_TOKEN;
-const actionStartTime = new Date(String(process.env.START_TIME)).toISOString();
-const actionEndTime = new Date().toISOString();
+const actionStartTime = new Date(String(process.env.START_TIME));
+const actionEndTime = new Date();
 const actionName = process.env.ACTION_NAME;
 const actionURL = process.env.ACTION_URL;
 
