@@ -58,6 +58,7 @@ const actionURL = process.env.ACTION_URL;
 const context = JSON.parse(JSON.stringify(github.context));
 function getActionContext() {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log("Context: " + context);
         return {
             action_name: actionName,
             actor: context.actor,
@@ -80,6 +81,7 @@ function getActionVersion() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Getting action version");
         const wf_path = context.payload.workflow;
+        console.log("wf_path:" + wf_path);
         try {
             const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
             const response = yield axios_1.default.get(url, {
