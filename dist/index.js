@@ -58,7 +58,7 @@ const actionURL = process.env.ACTION_URL;
 const context = JSON.parse(JSON.stringify(github.context));
 function getActionContext() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("Context: " + context);
+        console.log("Context: " + JSON.stringify(context, null, 2));
         return {
             action_name: actionName,
             actor: context.actor,

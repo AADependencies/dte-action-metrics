@@ -29,7 +29,7 @@ const context = JSON.parse(JSON.stringify(github.context));
 
 async function getActionContext() : Promise<ActionContext> {
   
-  console.log("Context: " + context);
+  console.log("Context: " + JSON.stringify(context, null, 2));
   
   return {
     action_name: actionName,
