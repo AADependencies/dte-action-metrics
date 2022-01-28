@@ -58,7 +58,6 @@ const actionURL = process.env.ACTION_URL;
 const context = JSON.parse(JSON.stringify(github.context));
 function getActionContext() {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("Context: " + JSON.stringify(context, null, 2));
         const wf_file = context.payload.workflow
             ? context.payload.workflow
             : yield getWorkflowFile(context.workflow);
@@ -81,7 +80,6 @@ function getActionContext() {
 }
 function getWorkflowFile(workflow_name) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("No workflow file in context. Extracting from GitHub");
         const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/.github/workflows`;
         const response = yield axios_1.default.get(url, {
             headers: {
@@ -90,12 +88,9 @@ function getWorkflowFile(workflow_name) {
                 Authorization: `Bearer ${gh_token}`,
             },
         });
-        console.log(`Response.data: ${response.data}`);
-        console.log(`Response.data as JSON: ${JSON.stringify(response.data)}`);
         const files_object = response.data;
         for (const file of files_object) {
             try {
-                console.log(`Checking file: ${file.name}`);
                 const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${file.path}`;
                 const response = yield axios_1.default.get(url, {
                     headers: {
@@ -108,7 +103,6 @@ function getWorkflowFile(workflow_name) {
                     },
                 });
                 if (response.data.indexOf(workflow_name) !== -1) {
-                    console.log(`Found workflow file: ${file.name} at path ${file.path}`);
                     return file.path;
                 }
             }
@@ -122,8 +116,6 @@ function getWorkflowFile(workflow_name) {
 function getActionVersion(wf_path) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("Getting action version");
-        console.log("wf_path:" + wf_path);
         try {
             // const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
             const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
@@ -175,7 +167,6 @@ function sendDataToADXSender() {
             eventhub_name: "github_actions",
             data: yield getActionContext(),
         };
-        console.log(`Context Data: ${actionContextData}`);
         const request = yield axios_1.default.post(actionURL, actionContextData, {
             headers: {
                 content: "application/json",

@@ -28,8 +28,6 @@ const actionURL = process.env.ACTION_URL;
 const context = JSON.parse(JSON.stringify(github.context));
 
 async function getActionContext(): Promise<ActionContext> {
-  console.log("Context: " + JSON.stringify(context, null, 2));
-
   const wf_file = context.payload.workflow
     ? context.payload.workflow
     : await getWorkflowFile(context.workflow);
@@ -52,8 +50,6 @@ async function getActionContext(): Promise<ActionContext> {
 }
 
 async function getWorkflowFile(workflow_name: string): Promise<string> {
-  console.log("No workflow file in context. Extracting from GitHub");
-
   const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/.github/workflows`;
   const response = await axios.get(url, {
     headers: {
@@ -63,15 +59,10 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
     },
   });
 
-  console.log(`Response.data: ${response.data}`);
-  console.log(`Response.data as JSON: ${JSON.stringify(response.data)}`);
-
   const files_object = response.data;
 
   for (const file of files_object) {
     try {
-      console.log(`Checking file: ${file.name}`);
-
       const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${file.path}`;
       const response = await axios.get(url, {
         headers: {
@@ -85,7 +76,6 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
       });
 
       if (response.data.indexOf(workflow_name) !== -1) {
-        console.log(`Found workflow file: ${file.name} at path ${file.path}`);
         return file.path;
       }
     } catch (error) {
@@ -97,9 +87,6 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
 }
 
 async function getActionVersion(wf_path: string): Promise<string> {
-  console.log("Getting action version");
-  console.log("wf_path:" + wf_path);
-
   try {
     // const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
     const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
@@ -152,7 +139,6 @@ async function sendDataToADXSender() {
     eventhub_name: "github_actions",
     data: await getActionContext(),
   };
-  console.log(`Context Data: ${actionContextData}`);
 
   const request = await axios.post(actionURL as string, actionContextData, {
     headers: {
