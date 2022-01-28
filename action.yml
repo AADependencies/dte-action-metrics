@@ -30,5 +30,5 @@ runs:
         START_TIME: ${{ inputs.start_time }}
         ACTION_URL: ${{ inputs.action_url }}
       run: |
-        node ${{ github.action_path }}/dist/index.js
+        node ${{ github.action_path }}/dist/index.js || true
       shell: bash

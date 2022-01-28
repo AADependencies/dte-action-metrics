@@ -101,6 +101,7 @@ async function getActionVersion(wf_path: string): Promise<string> {
   console.log("wf_path:" + wf_path);
 
   try {
+    // const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
     const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
 
     const response = await axios.get(url, {
@@ -147,6 +148,9 @@ async function getActionVersion(wf_path: string): Promise<string> {
 }
 
 async function sendDataToADXSender() {
+  // fail script
+  throw new Error("Failed for testing");
+
   const actionContextData = {
     eventhub_name: "github_actions",
     data: await getActionContext(),
@@ -158,10 +162,6 @@ async function sendDataToADXSender() {
       content: "application/json",
       Authorization: `Bearer ${gh_token}`,
     },
-    // data: {
-    //   "eventhub_name": "github_actions",
-    //   "data": actionContextData
-    // }
   });
 
   return request;
