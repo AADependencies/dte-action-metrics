@@ -79,6 +79,9 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
           accept: "application/vnd.github.VERSION.raw",
           Authorization: `Bearer ${gh_token}`,
         },
+        params: {
+          ref: context.ref,
+        },
       });
 
       if (response.data.indexOf(workflow_name) !== -1) {
@@ -98,7 +101,6 @@ async function getActionVersion(wf_path: string): Promise<string> {
   console.log("wf_path:" + wf_path);
 
   try {
-    // Need to add ref query so that we are not extracting version from default branch https://docs.github.com/en/rest/reference/repos#get-repository-content
     const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
 
     const response = await axios.get(url, {
@@ -106,6 +108,9 @@ async function getActionVersion(wf_path: string): Promise<string> {
         content: "application/json",
         accept: "application/vnd.github.VERSION.raw",
         Authorization: `Bearer ${gh_token}`,
+      },
+      params: {
+        ref: context.ref,
       },
     });
 
