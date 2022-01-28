@@ -59,17 +59,18 @@ const context = JSON.parse(JSON.stringify(github.context));
 function getActionContext() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Context: " + JSON.stringify(context, null, 2));
+        const wf_file = context.payload.workflow
+            ? context.payload.workflow
+            : yield getWorkflowFile(context.workflow);
         return {
             action_name: actionName,
             actor: context.actor,
             repo_name: context.payload.repository.name,
-            action_version: yield getActionVersion(),
+            action_version: yield getActionVersion(wf_file),
             start_time: actionStartTime,
             end_time: actionEndTime,
             workflow_name: context.workflow,
-            workflow_file: context.payload.workflow
-                ? context.payload.workflow.split("/").pop()
-                : yield getWorkflowFile(context.workflow),
+            workflow_file: wf_file.split("/").pop(),
             workflow_trigger: context.eventName,
             job_name: context.job,
             sha: context.sha,
@@ -115,13 +116,10 @@ function getWorkflowFile(workflow_name) {
         return "N/A";
     });
 }
-function getActionVersion() {
+function getActionVersion(wf_path) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Getting action version");
-        const wf_path = context.payload.workflow
-            ? context.payload.workflow
-            : yield getWorkflowFile(context.workflow);
         console.log("wf_path:" + wf_path);
         try {
             // Need to add ref query so that we are not extracting version from default branch https://docs.github.com/en/rest/reference/repos#get-repository-content

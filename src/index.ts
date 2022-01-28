@@ -30,17 +30,19 @@ const context = JSON.parse(JSON.stringify(github.context));
 async function getActionContext(): Promise<ActionContext> {
   console.log("Context: " + JSON.stringify(context, null, 2));
 
+  const wf_file = context.payload.workflow
+    ? context.payload.workflow
+    : await getWorkflowFile(context.workflow);
+
   return {
     action_name: actionName,
     actor: context.actor,
     repo_name: context.payload.repository.name,
-    action_version: await getActionVersion(),
+    action_version: await getActionVersion(wf_file),
     start_time: actionStartTime,
     end_time: actionEndTime,
     workflow_name: context.workflow,
-    workflow_file: context.payload.workflow
-      ? context.payload.workflow.split("/").pop()
-      : await getWorkflowFile(context.workflow),
+    workflow_file: wf_file.split("/").pop(),
     workflow_trigger: context.eventName,
     job_name: context.job,
     sha: context.sha,
@@ -49,7 +51,7 @@ async function getActionContext(): Promise<ActionContext> {
   };
 }
 
-async function getWorkflowFile(workflow_name: string) {
+async function getWorkflowFile(workflow_name: string): Promise<string> {
   console.log("No workflow file in context. Extracting from GitHub");
 
   const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/.github/workflows`;
@@ -91,11 +93,8 @@ async function getWorkflowFile(workflow_name: string) {
   return "N/A";
 }
 
-async function getActionVersion(): Promise<string> {
+async function getActionVersion(wf_path: string): Promise<string> {
   console.log("Getting action version");
-  const wf_path = context.payload.workflow
-    ? context.payload.workflow
-    : await getWorkflowFile(context.workflow);
   console.log("wf_path:" + wf_path);
 
   try {
