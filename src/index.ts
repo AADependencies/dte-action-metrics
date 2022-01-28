@@ -61,7 +61,10 @@ async function getWorkflowFile(workflow_name: string) {
     },
   });
 
-  const files_object = response.data[0];
+  console.log(`Response.data: ${response.data}`);
+  console.log(`Response.data as JSON: ${JSON.stringify(response.data)}`);
+
+  const files_object = response.data;
 
   for (const file of files_object) {
     try {
