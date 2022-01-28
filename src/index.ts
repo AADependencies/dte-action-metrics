@@ -148,9 +148,6 @@ async function getActionVersion(wf_path: string): Promise<string> {
 }
 
 async function sendDataToADXSender() {
-  // fail script
-  throw new Error("Failed for testing");
-
   const actionContextData = {
     eventhub_name: "github_actions",
     data: await getActionContext(),

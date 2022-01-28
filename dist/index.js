@@ -171,8 +171,6 @@ function getActionVersion(wf_path) {
 }
 function sendDataToADXSender() {
     return __awaiter(this, void 0, void 0, function* () {
-        // fail script
-        throw new Error("Failed for testing");
         const actionContextData = {
             eventhub_name: "github_actions",
             data: yield getActionContext(),
