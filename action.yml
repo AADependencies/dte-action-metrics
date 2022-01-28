@@ -17,11 +17,9 @@ runs:
   using: 'composite'
 
   steps:
-    - name: Check token
-      id: token
+    - name: Echo Action
       run: |
-        echo "Checking token"
-        echo echo ::set-output name=gh-token::${{github.token}}
+        echo "Capturing metrics for action: ${action_name} and sending to ADX"
       shell: bash
 
     - name: Get action metrics

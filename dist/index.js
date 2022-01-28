@@ -67,7 +67,9 @@ function getActionContext() {
             start_time: actionStartTime,
             end_time: actionEndTime,
             workflow_name: context.workflow,
-            workflow_file: context.payload.workflow.split("/").pop(),
+            workflow_file: context.payload.workflow
+                ? context.payload.workflow.split("/").pop()
+                : yield getWorkflowFile(context.workflow),
             workflow_trigger: context.eventName,
             job_name: context.job,
             sha: context.sha,
@@ -76,18 +78,56 @@ function getActionContext() {
         };
     });
 }
+function getWorkflowFile(workflow_name) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("No workflow file in context. Extracting from GitHub");
+        const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/.github/workflows`;
+        const response = yield axios_1.default.get(url, {
+            headers: {
+                content: "application/json",
+                accept: "application/vnd.github.VERSION.raw",
+                Authorization: `Bearer ${gh_token}`,
+            },
+        });
+        const files_object = response.data[0];
+        for (const file of files_object) {
+            try {
+                console.log(`Checking file: ${file.name}`);
+                const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${file.path}`;
+                const response = yield axios_1.default.get(url, {
+                    headers: {
+                        content: "application/json",
+                        accept: "application/vnd.github.VERSION.raw",
+                        Authorization: `Bearer ${gh_token}`,
+                    },
+                });
+                if (response.data.indexOf(workflow_name) !== -1) {
+                    console.log(`Found workflow file: ${file.name} at path ${file.path}`);
+                    return file.path;
+                }
+            }
+            catch (error) {
+                console.log(`Error: ${error}`);
+            }
+        }
+        return "N/A";
+    });
+}
 function getActionVersion() {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Getting action version");
-        const wf_path = context.payload.workflow;
+        const wf_path = context.payload.workflow
+            ? context.payload.workflow
+            : yield getWorkflowFile(context.workflow);
         console.log("wf_path:" + wf_path);
         try {
+            // Need to add ref query so that we are not extracting version from default branch https://docs.github.com/en/rest/reference/repos#get-repository-content
             const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
             const response = yield axios_1.default.get(url, {
                 headers: {
-                    content: 'application/json',
-                    accept: 'application/vnd.github.VERSION.raw',
+                    content: "application/json",
+                    accept: "application/vnd.github.VERSION.raw",
                     Authorization: `Bearer ${gh_token}`,
                 },
             });
@@ -95,11 +135,15 @@ function getActionVersion() {
             const steps = (_a = doc.contents) === null || _a === void 0 ? void 0 : _a.toJSON().jobs[context.job].steps;
             const targetRepo = "AAInternal/" + actionName;
             for (const step of Object.keys(steps)) {
-                const stepWith = steps[step].hasOwnProperty('with') ? steps[step].with : null;
+                const stepWith = steps[step].hasOwnProperty("with")
+                    ? steps[step].with
+                    : null;
                 if (stepWith !== null) {
-                    const stepRepo = stepWith.hasOwnProperty('repository') ? stepWith.repository : null;
+                    const stepRepo = stepWith.hasOwnProperty("repository")
+                        ? stepWith.repository
+                        : null;
                     if (stepRepo === targetRepo) {
-                        if (stepWith.hasOwnProperty('ref')) {
+                        if (stepWith.hasOwnProperty("ref")) {
                             return stepWith.ref;
                         }
                         else {
@@ -122,14 +166,13 @@ function getActionVersion() {
 function sendDataToADXSender() {
     return __awaiter(this, void 0, void 0, function* () {
         const actionContextData = {
-            "eventhub_name": "github_actions",
-            "data": yield getActionContext()
+            eventhub_name: "github_actions",
+            data: yield getActionContext(),
         };
-        console.log(actionContextData);
-        console.log("Action URL: " + actionURL);
+        console.log(`Context Data: ${actionContextData}`);
         const request = yield axios_1.default.post(actionURL, actionContextData, {
             headers: {
-                content: 'application/json',
+                content: "application/json",
                 Authorization: `Bearer ${gh_token}`,
             },
             // data: {
