@@ -136,7 +136,7 @@ async function getActionVersion(wf_path: string): Promise<string> {
 
 async function sendDataToADXSender() {
   const actionContextData = {
-    eventhub_name: "github_actions",
+    eventhub_name: "github_actions_prod",
     data: await getActionContext(),
   };
 

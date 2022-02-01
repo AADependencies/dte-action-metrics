@@ -164,7 +164,7 @@ function getActionVersion(wf_path) {
 function sendDataToADXSender() {
     return __awaiter(this, void 0, void 0, function* () {
         const actionContextData = {
-            eventhub_name: "github_actions",
+            eventhub_name: "github_actions_prod",
             data: yield getActionContext(),
         };
         const request = yield axios_1.default.post(actionURL, actionContextData, {
