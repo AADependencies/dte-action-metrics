@@ -1,0 +1,34 @@
+name: DTE Action Metrics
+description: This action will collect metrics from the other actions that utilize it
+author: Mohamed El-Malah
+
+inputs:
+  action_name:
+    description: Name of calling action
+    required: true
+  start_time:
+    description: Time action started
+    required: true
+  action_url:
+    description: URL for ADX service
+    required: true
+
+runs:
+  using: 'composite'
+
+  steps:
+    - name: Echo Action
+      run: |
+        echo "Capturing metrics for action: ${action_name} and sending to ADX"
+      shell: bash
+
+    - name: Get action metrics
+      id: metrics
+      env:
+        GH_TOKEN: ${{ github.token }}
+        ACTION_NAME: ${{ inputs.action_name }}
+        START_TIME: ${{ inputs.start_time }}
+        ACTION_URL: ${{ inputs.action_url }}
+      run: |
+        node ${{ github.action_path }}/dist/index.js || true
+      shell: bash
