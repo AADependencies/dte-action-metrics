@@ -66,8 +66,12 @@ function getActionContext() {
             actor: context.actor,
             repo_name: context.payload.repository.name,
             action_version: yield getActionVersion(wf_file),
-            start_time: actionStartTime,
-            end_time: actionEndTime,
+            start_time: actionStartTime.toLocaleString("en-US", {
+                timeZone: "America/Chicago",
+            }),
+            end_time: actionEndTime.toLocaleString("en-US", {
+                timeZone: "America/Chicago",
+            }),
             workflow_name: context.workflow,
             workflow_file: wf_file.split("/").pop(),
             workflow_trigger: context.eventName,
