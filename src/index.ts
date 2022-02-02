@@ -8,8 +8,8 @@ type ActionContext = {
   actor: string;
   repo_name: string;
   action_version: string;
-  start_time: Date | undefined;
-  end_time: Date;
+  start_time: string | undefined;
+  end_time: string | undefined;
   workflow_name: string;
   workflow_file: string;
   workflow_trigger: string;
@@ -17,7 +17,7 @@ type ActionContext = {
   sha: string;
   repo_ref: string;
   run_url: string;
-}
+};
 
 const gh_token = process.env.GH_TOKEN;
 const actionStartTime = new Date(String(process.env.START_TIME));
@@ -37,8 +37,12 @@ async function getActionContext(): Promise<ActionContext> {
     actor: context.actor,
     repo_name: context.payload.repository.name,
     action_version: await getActionVersion(wf_file),
-    start_time: actionStartTime,
-    end_time: actionEndTime,
+    start_time: actionStartTime.toLocaleString("en-US", {
+      timeZone: "America/Chicago",
+    }),
+    end_time: actionEndTime.toLocaleString("en-US", {
+      timeZone: "America/Chicago",
+    }),
     workflow_name: context.workflow,
     workflow_file: wf_file.split("/").pop(),
     workflow_trigger: context.eventName,
