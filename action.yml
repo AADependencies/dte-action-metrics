@@ -35,3 +35,4 @@ runs:
       
     - name: Error Notice
       run: echo "**** If there the previous command Errors our - please disregard. This will not affect your workflow ****"
+      shell: bash
