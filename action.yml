@@ -21,29 +21,6 @@ runs:
       run: |
         echo "Capturing metrics for action: ${action_name} and sending to ADX"
       shell: bash
-      
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-      
-    # This is needed to determine the path to the github action. 
-    # The path that is inherited from the runner is not correct if the action is running in a container
-    - name: Set Action Environment
-      id: runner-path
-      run: |
-        if [[ "${{github.action_path}}" == *"$PWD"* ]] 
-        then
-          echo "Path is running on runner"
-          echo ::set-output name=action-path::${{github.action_path}}
-        else
-          echo "action is running in container"
-          echo ::set-output name=action-path::"$PWD/.github/actions/dte-action-metrics"
-        fi
-      shell: bash
-      
-    - name: print path
-      run: echo ${{steps.runner-path.outputs.action-path}}
-      shell: bash
 
     - name: Get action metrics
       id: metrics
@@ -53,5 +30,8 @@ runs:
         START_TIME: ${{ inputs.start_time }}
         ACTION_URL: ${{ inputs.action_url }}
       run: |
-        node ${{steps.runner-path.outputs.action-path}}/dist/index.js || true
+        node ${{ github.action_path }}/dist/index.js || true
       shell: bash
+      
+    - name: Error Notice
+      run: echo "**** If there the previous command Errors our - please disregard. This will not affect your workflow ****"
