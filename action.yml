@@ -22,6 +22,10 @@ runs:
         echo "Capturing metrics for action: ${action_name} and sending to ADX"
       shell: bash
       
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+      
     # This is needed to determine the path to the github action. 
     # The path that is inherited from the runner is not correct if the action is running in a container
     - name: Set Action Environment
