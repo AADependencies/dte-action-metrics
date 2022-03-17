@@ -19,7 +19,7 @@ runs:
   steps:
     - name: Echo Action
       run: |
-        echo "Capturing metrics for action: ${action_name} and sending to ADX"
+        echo "Capturing metrics for action: ${{ action_name }} and sending to ADX"
       shell: bash
 
     - name: Get action metrics
