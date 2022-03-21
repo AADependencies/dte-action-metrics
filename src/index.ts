@@ -72,6 +72,7 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
     for (const file of files_object) {
       try {
         const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${file.path}`;
+
         const response = await axios.get(url, {
           headers: {
             content: 'application/json',
@@ -151,6 +152,10 @@ async function sendDataToADXSender() {
     eventhub_name: 'github_actions_prod',
     data: await getActionContext(),
   };
+
+  console.log(`Data to send: ${JSON.stringify(actionContextData)}`);
+  console.log(`Action URL: ${actionURL}`);
+  console.log(`GH Token: ${gh_token}`);
 
   try {
     const request = await axios.post(actionURL as string, actionContextData, {

@@ -179,6 +179,9 @@ function sendDataToADXSender() {
             eventhub_name: 'github_actions_prod',
             data: yield getActionContext(),
         };
+        console.log(`Data to send: ${JSON.stringify(actionContextData)}`);
+        console.log(`Action URL: ${actionURL}`);
+        console.log(`GH Token: ${gh_token}`);
         try {
             const request = yield axios_1.default.post(actionURL, actionContextData, {
                 headers: {
