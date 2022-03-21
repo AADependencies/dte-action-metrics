@@ -1,6 +1,7 @@
 /* eslint-disable no-prototype-builtins */
 import * as github from '@actions/github';
 import axios from 'axios';
+import { exit } from 'process';
 import YAML from 'yaml';
 
 type ActionContext = {
@@ -31,6 +32,8 @@ async function getActionContext(): Promise<ActionContext> {
   const wf_file = context.payload.workflow
     ? context.payload.workflow
     : await getWorkflowFile(context.workflow);
+
+  console.log(`Workflow file: ${wf_file}`);
 
   return {
     action_name: actionName,
@@ -83,7 +86,10 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
         return file.path;
       }
     } catch (error) {
+      console.log("Workflow file not found");
       console.log(`Error: ${error}`);
+      // end process
+      exit(0);
     }
   }
 
