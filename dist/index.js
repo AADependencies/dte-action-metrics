@@ -94,6 +94,9 @@ function getWorkflowFile(workflow_name) {
                     accept: 'application/vnd.github.VERSION.raw',
                     Authorization: `Bearer ${gh_token}`,
                 },
+                params: {
+                    ref: context.ref,
+                },
             });
             const files_object = response.data;
             for (const file of files_object) {
@@ -179,7 +182,7 @@ function sendDataToADXSender() {
             eventhub_name: 'github_actions_prod',
             data: yield getActionContext(),
         };
-        console.log(`Data to send: ${JSON.stringify(actionContextData)}`);
+        console.log(`Data to send: ${actionContextData}`);
         console.log(`Action URL: ${actionURL}`);
         try {
             const request = yield axios_1.default.post(actionURL, actionContextData, {
@@ -194,7 +197,7 @@ function sendDataToADXSender() {
         catch (error) {
             console.log('Failed to send data to ADX');
             console.log(error);
-            (0, process_1.exit)(1);
+            (0, process_1.exit)(0);
         }
     });
 }

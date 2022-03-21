@@ -65,6 +65,9 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
         accept: 'application/vnd.github.VERSION.raw',
         Authorization: `Bearer ${gh_token}`,
       },
+      params: {
+        ref: context.ref,
+      },
     });
 
     const files_object = response.data;
@@ -153,7 +156,7 @@ async function sendDataToADXSender() {
     data: await getActionContext(),
   };
 
-  console.log(`Data to send: ${JSON.stringify(actionContextData)}`);
+  console.log(`Data to send: ${actionContextData}`);
   console.log(`Action URL: ${actionURL}`);
 
   try {
@@ -169,7 +172,7 @@ async function sendDataToADXSender() {
   } catch (error) {
     console.log('Failed to send data to ADX');
     console.log(error);
-    exit(1);
+    exit(0);
   }
 }
 
