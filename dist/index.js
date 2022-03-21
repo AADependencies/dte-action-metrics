@@ -91,7 +91,7 @@ function getWorkflowFile(workflow_name) {
             const response = yield axios_1.default.get(url, {
                 headers: {
                     content: 'application/json',
-                    accept: 'application/vnd.github.VERSION.raw',
+                    accept: 'application/vnd.github.v3.raw',
                     Authorization: `Bearer ${gh_token}`,
                 },
                 params: {
@@ -105,7 +105,7 @@ function getWorkflowFile(workflow_name) {
                     const response = yield axios_1.default.get(url, {
                         headers: {
                             content: 'application/json',
-                            accept: 'application/vnd.github.VERSION.raw',
+                            accept: 'application/vnd.github.v3.raw',
                             Authorization: `Bearer ${gh_token}`,
                         },
                         params: {
@@ -143,7 +143,7 @@ function getActionVersion(wf_path) {
             const response = yield axios_1.default.get(url, {
                 headers: {
                     content: 'application/json',
-                    accept: 'application/vnd.github.VERSION.raw',
+                    accept: 'application/vnd.github.v3.raw',
                     Authorization: `Bearer ${gh_token}`,
                 },
                 params: {

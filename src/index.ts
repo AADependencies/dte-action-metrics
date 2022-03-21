@@ -62,7 +62,7 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
     const response = await axios.get(url, {
       headers: {
         content: 'application/json',
-        accept: 'application/vnd.github.VERSION.raw',
+        accept: 'application/vnd.github.v3.raw',
         Authorization: `Bearer ${gh_token}`,
       },
       params: {
@@ -79,7 +79,7 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
         const response = await axios.get(url, {
           headers: {
             content: 'application/json',
-            accept: 'application/vnd.github.VERSION.raw',
+            accept: 'application/vnd.github.v3.raw',
             Authorization: `Bearer ${gh_token}`,
           },
           params: {
@@ -117,7 +117,7 @@ async function getActionVersion(wf_path: string): Promise<string> {
     const response = await axios.get(url, {
       headers: {
         content: 'application/json',
-        accept: 'application/vnd.github.VERSION.raw',
+        accept: 'application/vnd.github.v3.raw',
         Authorization: `Bearer ${gh_token}`,
       },
       params: {
