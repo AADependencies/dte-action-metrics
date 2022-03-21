@@ -155,7 +155,6 @@ async function sendDataToADXSender() {
 
   console.log(`Data to send: ${JSON.stringify(actionContextData)}`);
   console.log(`Action URL: ${actionURL}`);
-  console.log(`GH Token: ${gh_token}`);
 
   try {
     const request = await axios.post(actionURL as string, actionContextData, {
@@ -165,7 +164,8 @@ async function sendDataToADXSender() {
       },
     });
 
-    return request;
+    let request_response = { status: request.status, data: request.data };
+    return request_response;
   } catch (error) {
     console.log('Failed to send data to ADX');
     console.log(error);
