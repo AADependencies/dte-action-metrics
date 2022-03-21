@@ -11,7 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{secrets.TOKEN_GIT}}      
+          token: ${{secrets.TOKEN_GIT}}
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'   
+
+      - name: Install dependencies
+        run: npm install    
 
       - name: Configure Git
         run: |

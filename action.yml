@@ -22,6 +22,11 @@ runs:
         echo "Capturing metrics for action: ${{ inputs.action_name }} and sending to ADX"
       shell: bash
 
+    - name: Setup node
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14' 
+
     - name: Get action metrics
       id: metrics
       env:
