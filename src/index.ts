@@ -40,14 +40,14 @@ async function getActionContext(): Promise<ActionContext> {
     actor: context.actor,
     repo_name: context.payload.repository.name,
     action_version: await getActionVersion(wf_file),
-    start_time: actionStartTime.toLocaleString("en-US", {
-      timeZone: "America/Chicago",
+    start_time: actionStartTime.toLocaleString('en-US', {
+      timeZone: 'America/Chicago',
     }),
-    end_time: actionEndTime.toLocaleString("en-US", {
-      timeZone: "America/Chicago",
+    end_time: actionEndTime.toLocaleString('en-US', {
+      timeZone: 'America/Chicago',
     }),
     workflow_name: context.workflow,
-    workflow_file: wf_file.split("/").pop(),
+    workflow_file: wf_file.split('/').pop(),
     workflow_trigger: context.eventName,
     job_name: context.job,
     sha: context.sha,
@@ -57,43 +57,49 @@ async function getActionContext(): Promise<ActionContext> {
 }
 
 async function getWorkflowFile(workflow_name: string): Promise<string> {
-  const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/.github/workflows`;
-  const response = await axios.get(url, {
-    headers: {
-      content: "application/json",
-      accept: "application/vnd.github.VERSION.raw",
-      Authorization: `Bearer ${gh_token}`,
-    },
-  });
+  try {
+    const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/.github/workflows`;
+    const response = await axios.get(url, {
+      headers: {
+        content: 'application/json',
+        accept: 'application/vnd.github.VERSION.raw',
+        Authorization: `Bearer ${gh_token}`,
+      },
+    });
 
-  const files_object = response.data;
+    const files_object = response.data;
 
-  for (const file of files_object) {
-    try {
-      const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${file.path}`;
-      const response = await axios.get(url, {
-        headers: {
-          content: "application/json",
-          accept: "application/vnd.github.VERSION.raw",
-          Authorization: `Bearer ${gh_token}`,
-        },
-        params: {
-          ref: context.ref,
-        },
-      });
+    for (const file of files_object) {
+      try {
+        const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${file.path}`;
+        const response = await axios.get(url, {
+          headers: {
+            content: 'application/json',
+            accept: 'application/vnd.github.VERSION.raw',
+            Authorization: `Bearer ${gh_token}`,
+          },
+          params: {
+            ref: context.ref,
+          },
+        });
 
-      if (response.data.indexOf(workflow_name) !== -1) {
-        return file.path;
+        if (response.data.indexOf(workflow_name) !== -1) {
+          return file.path;
+        }
+      } catch (error) {
+        console.log('Workflow file not found');
+        console.log(`Error: ${error}`);
+        // end process
+        exit(0);
       }
-    } catch (error) {
-      console.log("Workflow file not found");
-      console.log(`Error: ${error}`);
-      // end process
-      exit(0);
     }
+  } catch (error) {
+    console.log('Failed to get repo files');
+    console.log(error);
+    exit(1);
   }
 
-  return "N/A";
+  return 'N/A';
 }
 
 async function getActionVersion(wf_path: string): Promise<string> {
@@ -103,8 +109,8 @@ async function getActionVersion(wf_path: string): Promise<string> {
 
     const response = await axios.get(url, {
       headers: {
-        content: "application/json",
-        accept: "application/vnd.github.VERSION.raw",
+        content: 'application/json',
+        accept: 'application/vnd.github.VERSION.raw',
         Authorization: `Bearer ${gh_token}`,
       },
       params: {
@@ -115,21 +121,17 @@ async function getActionVersion(wf_path: string): Promise<string> {
     const doc = YAML.parseDocument(response.data);
 
     const steps = doc.contents?.toJSON().jobs[context.job].steps;
-    const targetRepo = "AAInternal/" + actionName;
+    const targetRepo = 'AAInternal/' + actionName;
 
     for (const step of Object.keys(steps)) {
-      const stepWith = steps[step].hasOwnProperty("with")
-        ? steps[step].with
-        : null;
+      const stepWith = steps[step].hasOwnProperty('with') ? steps[step].with : null;
       if (stepWith !== null) {
-        const stepRepo = stepWith.hasOwnProperty("repository")
-          ? stepWith.repository
-          : null;
+        const stepRepo = stepWith.hasOwnProperty('repository') ? stepWith.repository : null;
         if (stepRepo === targetRepo) {
-          if (stepWith.hasOwnProperty("ref")) {
+          if (stepWith.hasOwnProperty('ref')) {
             return stepWith.ref;
           } else {
-            return "default branch";
+            return 'default branch';
           }
         }
       } else {
@@ -137,27 +139,33 @@ async function getActionVersion(wf_path: string): Promise<string> {
       }
     }
 
-    return "N/A";
+    return 'N/A';
   } catch (error) {
     console.log(error);
-    return "Failed to get version";
+    return 'Failed to get version';
   }
 }
 
 async function sendDataToADXSender() {
   const actionContextData = {
-    eventhub_name: "github_actions_prod",
+    eventhub_name: 'github_actions_prod',
     data: await getActionContext(),
   };
 
-  const request = await axios.post(actionURL as string, actionContextData, {
-    headers: {
-      content: "application/json",
-      Authorization: `Bearer ${gh_token}`,
-    },
-  });
+  try {
+    const request = await axios.post(actionURL as string, actionContextData, {
+      headers: {
+        content: 'application/json',
+        Authorization: `Bearer ${gh_token}`,
+      },
+    });
 
-  return request;
+    return request;
+  } catch (error) {
+    console.log('Failed to send data to ADX');
+    console.log(error);
+    exit(1);
+  }
 }
 
 async function printRequest() {
@@ -165,4 +173,3 @@ async function printRequest() {
 }
 
 printRequest();
-
