@@ -25,7 +25,7 @@ jobs:
       - name: Checkout Action
         uses: actions/checkout@v2
         with:
-          repo: AADependencies/dte-action-metrics
+          repository: AADependencies/dte-action-metrics
           ref: ${{ github.ref }}
 
       - name: Test Action
