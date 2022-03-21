@@ -118,15 +118,14 @@ function getWorkflowFile(workflow_name) {
                 }
                 catch (error) {
                     console.log('Workflow file not found');
-                    console.log(`Error: ${error}`);
-                    // end process
+                    // console.log(`Error: ${error}`);
                     (0, process_1.exit)(0);
                 }
             }
         }
         catch (error) {
-            console.log('Failed to get repo files');
-            console.log(error);
+            console.log('Unable to get repo files');
+            // console.log(error);
             (0, process_1.exit)(1);
         }
         return 'N/A';
@@ -135,6 +134,9 @@ function getWorkflowFile(workflow_name) {
 function getActionVersion(wf_path) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
+        if (wf_path === 'N/A') {
+            return 'N/A';
+        }
         try {
             // const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
             const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
@@ -171,7 +173,7 @@ function getActionVersion(wf_path) {
             return 'N/A';
         }
         catch (error) {
-            console.log(error);
+            console.log('Failed to get version');
             return 'Failed to get version';
         }
     });
@@ -196,7 +198,7 @@ function sendDataToADXSender() {
         }
         catch (error) {
             console.log('Failed to send data to ADX');
-            console.log(error);
+            // console.log(error);
             (0, process_1.exit)(0);
         }
     });

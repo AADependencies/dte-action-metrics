@@ -92,14 +92,13 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
         }
       } catch (error) {
         console.log('Workflow file not found');
-        console.log(`Error: ${error}`);
-        // end process
+        // console.log(`Error: ${error}`);
         exit(0);
       }
     }
   } catch (error) {
-    console.log('Failed to get repo files');
-    console.log(error);
+    console.log('Unable to get repo files');
+    // console.log(error);
     exit(1);
   }
 
@@ -107,6 +106,10 @@ async function getWorkflowFile(workflow_name: string): Promise<string> {
 }
 
 async function getActionVersion(wf_path: string): Promise<string> {
+  if (wf_path === 'N/A') {
+    return 'N/A';
+  }
+
   try {
     // const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
     const url = `https://api.github.com/repos/${context.payload.organization.login}/${context.payload.repository.name}/contents/${wf_path}`;
@@ -145,7 +148,7 @@ async function getActionVersion(wf_path: string): Promise<string> {
 
     return 'N/A';
   } catch (error) {
-    console.log(error);
+    console.log('Failed to get version');
     return 'Failed to get version';
   }
 }
@@ -171,7 +174,7 @@ async function sendDataToADXSender() {
     return request_response;
   } catch (error) {
     console.log('Failed to send data to ADX');
-    console.log(error);
+    // console.log(error);
     exit(0);
   }
 }
