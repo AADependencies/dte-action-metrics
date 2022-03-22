@@ -1,6 +1,6 @@
 {
   "name": "dte-action-metrics",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "GitHub action to be embedded into other actions to capture action specific metrics.",
   "main": "dist/index.js",
   "scripts": {
