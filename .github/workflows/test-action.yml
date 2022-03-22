@@ -1,0 +1,36 @@
+name: Test Action
+
+on:
+  pull_request:
+  workflow_dispatch:
+    
+
+jobs:
+  test-action-call:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Action
+        uses: actions/checkout@v2
+
+      - name: Test Action
+        uses: ./
+        with:
+          action_name: dte-action-metrics
+          start_time: $(date +'%Y-%m-%dT%H:%M:%S%z')
+          action_url: ${{secrets.ENDPOINT}}
+
+  test-action-reference:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Action
+        uses: actions/checkout@v2
+        with:
+          repository: AADependencies/dte-action-metrics
+          ref: ${{ github.ref }}
+
+      - name: Test Action
+        uses: ./
+        with:
+          action_name: dte-action-metrics
+          start_time: $(date +'%Y-%m-%dT%H:%M:%S%z')
+          action_url: ${{secrets.ENDPOINT}}

@@ -1,0 +1,43 @@
+name: Create release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{secrets.TOKEN_GIT}}
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'   
+
+      - name: Install dependencies
+        run: npm install    
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "yourfriends@githubactions.com"
+          git config --global user.name "Build-and-Release-Bot"
+
+      - name: Create Release
+        env:
+          GH_TOKEN: ${{secrets.TOKEN_GIT}}
+        run: |
+          echo "CURRENT_VERSION=`node -p "require('./package.json').version"`" >> $GITHUB_ENV
+          npm run release
+          echo "LATEST_VERSION=`node -p "require('./package.json').version"`" >> $GITHUB_ENV
+
+      - name: Update Major Version
+        if: env.CURRENT_VERSION != env.LATEST_VERSION
+        run: |
+          IFS='.'
+          read -a strarr <<< ${{ env.LATEST_VERSION}}
+          git tag -fa v${strarr[0]} -m "Update v${strarr[0]} tag"
+          git push origin v${strarr[0]} --force
